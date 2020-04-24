@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新生</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <!-- 所有的 css 资源 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../js/Idcheck.js"></script>
+
+    <style type="text/css">
+
+    </style>
+
+</head>
+<body>
+
+<!-- 防止margin向下击穿 -->
+<div style="margin-top: -1em;"><br></div>
+
+<div class="vue-box">
+
+    <!-- 参数栏 -->
+    <div class="c-panel">
+        <div class="c-title">用户添加</div>
+        <el-form ref="form">
+
+            <div class="c-item">
+                <label class="c-label">姓名：</label>
+                <el-input size="mini" v-model="student.studentName" ></el-input>
+                <span class="el-icon-close" style="display: none;color: red;" id="studentName"></span>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">身份证号：</label>
+                <el-input size="mini" v-model="student.studentIdNum" @blur="checkId(student.studentIdNum)"></el-input>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">学生类型：</label>
+                <el-select size="mini" v-model="student.studentType">
+                    <el-option label="应届生" :value="1"></el-option>
+                    <el-option label="专升本" :value="2"></el-option>
+                </el-select>
+                <span class="el-icon-close" style="display: none;color: red;" id="studentType"></span>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">投报专业：</label>
+                <template>
+                <el-select size="mini" v-model="value" filterable placeholder="请选择专业" @change="majorId">
+                    <el-option
+                            v-for="item in majorList"
+                            :key="item.majorId"
+                            :label="item.majorName"
+                            :value="item.majorId">
+                    </el-option>
+                </el-select>
+                </template>
+                <span class="el-icon-close" style="display: none;color: red;" id="student.majorId"></span>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">准考证号：</label>
+                <el-input size="mini" v-model="student.studentExamNum"></el-input>
+            </div>
+
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">家庭地址：</label>
+                <el-input size="mini" v-model="student.studentAddr"></el-input>
+                <span class="el-icon-close" style="display: none;color: red;" id="student.studentAddr"></span>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">联系方式：</label>
+                <el-input size="mini" v-model="student.studentPhone"></el-input>
+                <span class="el-icon-close" style="display: none;color: red;" id="student.studentPhone"></span>
+            </div>
+
+            <br>
+            <div class="c-item">
+                <label class="c-label">邮件地址：</label>
+                <el-input size="mini" v-model="student.studentEmail"></el-input>
+            </div>
+
+
+
+            <br>
+            <div class="c-item" style="min-width: 0px;">
+                <label class="c-label"></label>
+                <el-button type="primary" icon="el-icon-plus" size="mini" @click="ok">录入</el-button>
+            </div>
+
+        </el-form>
+
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    var arr=new Array();
+    new Vue({
+        el: '.vue-box',
+        data: {
+            student: {},
+            majorList:[],
+            value:""
+        },
+        created:function()
+        {
+            this.majorList1();
+        },
+        methods: {
+
+            // ok
+            ok: function() {
+
+                this.$message('数据添加, 参数：' + JSON.stringify(this.student));
+                var self = this;
+                if(this.checkNull())
+                {
+                        for(var i = 0;i<arr.length;i++)
+                        {
+                            $("#"+arr[i]).hide();
+
+                        }
+                        arr=[];
+                $.ajax({
+                    url:"/studentAdd",
+                    data:self.student,
+                    dataType:'json',
+                    Type:"POST",
+                    success:function (res) {
+                        if(res)
+                        {
+
+                            self.$message("数据添加成功")
+                        }
+                    },
+                    error:function (res) {
+                        console.log(res.status);
+                    }
+                });
+                }
+                else{
+                    this.$message("输入有误 请重新输入");
+                    for(var i = 0;i<arr.length;i++)
+                    {
+                        console.log(arr[i]);
+                        $("#"+arr[i]).show();
+                    }
+                }
+            },
+            checkId: function(Id){
+                if(!Idcheke(Id))
+                {
+                    this.$message("身份证输入有误");
+                }
+                    return Idcheke(Id);
+            },
+            checkNull:function() {
+
+                if(this.student.studentName ==''||this.student.studentName ==null)
+                {
+                    arr.push("studentName");
+
+                };
+                if(this.student.studentType ==''||this.student.studentType ==null)
+                {
+                    arr.push("studentType");
+
+                };
+                if(this.student.majorId ==''||this.student.majorId ==null)
+                {
+                    arr.push("studentMajor");
+
+                };
+                if(this.student.studentPhone ==''||this.student.studentPhone ==null)
+                {
+                    arr.push("studentPhone");
+
+                };
+                if(this.student.studentAddr ==''||this.student.studentAddr ==null)
+                {
+                    arr.push("studentAddr");
+
+                }
+                if(arr.length>0)
+                {
+                    return false;
+                }
+            return true;
+            },
+            majorList1:function () {
+                var self=this;
+                $.ajax({
+                    url:"/majorList",
+                    Type:"Post",
+                    success:function (res) {
+                        self.majorList=res;
+                    },
+                    error:function (res) {
+
+                    }
+                })
+            },
+            majorId:function(MajorId)
+            {
+                this.student.majorId=MajorId;
+            }
+        }
+    })
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

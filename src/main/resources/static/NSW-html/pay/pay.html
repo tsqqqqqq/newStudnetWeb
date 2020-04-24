@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>主页</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: #EEE;
+        }
+
+        .app {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        }
+
+        .content-box {
+            margin: 1em;
+            padding: 1em;
+            background-color: #FFF;
+            color: #666;
+        }
+
+        .el-tag{border-radius: 1px;}
+
+        /*800之下*/
+        @media(max-width: 800px) {
+            .kapian {
+                width: 100% !important;
+                margin-right: 0px !important;
+            }
+
+            .saoma {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+
+    <div class="content-box" >
+        <el-divider content-position="left">
+            <big><big>缴费清单</big></big>
+        </el-divider>
+        <template>
+            <el-table
+                    :data="tableData"
+                    border
+                    show-summary
+                    style="width: 100%">
+                <el-table-column
+                        prop="id"
+                        label="ID"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="title"
+                        label="缴费项目">
+                </el-table-column>
+                <el-table-column
+                        prop="pay"
+                        sortable
+                        label="金额">
+                </el-table-column>
+
+            </el-table>
+        </template>
+    </div>
+
+    <div class="content-box">
+
+        <div class="saoma" style="width: 20%; float: left; margin-right: 4%;">
+            <el-divider content-position="left">
+                <big><big>支付宝</big></big>
+            </el-divider>
+            <div style="text-align: center;">
+                <img src="../../img/zfb.png" style="width: 80%; ">
+            </div>
+        </div>
+        <div class="saoma" style="width: 20%; float: left; margin-right: 4%;">
+            <el-divider content-position="left">
+                <big><big>微信</big></big>
+            </el-divider>
+            <div style="text-align: center;">
+                <img src="../../img/wx.png" style="width: 80%; ">
+            </div>
+        </div>
+        <div class="kapian" style="width: 50%; float: left;">
+            <el-divider content-position="left">
+                <big><big>缴费须知</big></big>
+            </el-divider>
+            <ul style="padding-left: 1em; line-height: 1.5em;">
+                <li>
+                    银行缴费请前往以下链接缴费到相应账号：6221xxxxxxxxxxxxxx
+                    <br>
+                    <el-link type="primary" href="https://www.boc.cn/" target="_blank">银联缴费链接</el-link>
+                </li>
+                <li>
+                    请务必核对缴费信息与录取通知书上的信息是否一致
+                </li>
+                <li>
+                   如有错误请联系官方：0773-xxxxxx
+                </li>
+                <li>
+                    <el-link type="primary" href="http://www.guit.edu.cn/" target="_blank">学校官网</el-link>
+                </li>
+            </ul>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+
+</div>
+
+<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+</script>
+<script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '.app',
+        data: {
+            tableData:[
+                {
+                    id:1,
+                    title:'学杂费',
+                    pay:JSON.parse(sessionStorage.getItem("student")).studentMoney,
+                }
+            ]
+        },
+        methods: {
+            // 没了
+            meile: function() {
+                this.$message({
+                    message: '没了还点',
+                    type: 'warning'
+                });
+            },
+            // 显示文档页面
+            openDoc: function() {
+                parent.sp.selectMenu(11);
+            },
+            //计算缴费总数
+            getSummaries:function(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = '总价';
+                        return;
+                    }
+                    const values = data.map(item => Number(item[column.property]));
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+                        sums[index] += ' 元';
+                    } else {
+                        sums[index] = 'N/A';
+                    }
+                });
+
+                return sums;
+            }
+
+        }
+    })
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+    <script src="../../js/md5.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+</head>
+<body>
+<div style="width: 100%;height: 650px; background: #FFFFFF;">
+<div id="app" style="height: 80%;width: 80%;margin: 0px auto">
+    <div style="padding-top: 20px;">
+<el-steps :active="active" finish-status="success"  simple style="margin-top: 20px">
+    <el-step title="身份验证 "></el-step>
+    <el-step title="邮箱验证 "></el-step>
+    <el-step title="修改密码 "></el-step>
+    <el-step title="激活成功 "></el-step>
+</el-steps>
+        </div>
+    <div class="content" style="max-width: 100%;height: 100%; ">
+        <div style="height: 100px"></div>
+    <el-row class = "active1" v-show="active === 0"  title="身份验证"> <div >
+
+        <div>
+            <el-row >
+                <el-col :span="8"  :offset="6" ><div class="grid-content">
+                    <el-form :model="IdNum" ref="IdNum" label-width="100px" class="demo-dynamic">
+                        <el-form-item label="身份证号："
+                                      prop="IdNum"
+                                      :rules="[
+                        { required: true, message: '请输入身份证号', trigger: 'blur' },
+                        { validator:validID, message: '请输入正确的身份证号码', trigger: ['blur', 'change'] }
+                           ]"
+                        >
+                            <el-input v-model="IdNum.IdNum"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div></el-col>
+            </el-row>
+        </div>
+
+        <div>
+            <el-row>
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                    <el-form :model="examNum" ref="examNum" label-width="100px" class="demo-dynamic">
+                        <el-form-item label="准考证号："
+                                      prop="examNum"
+                                      :rules="[
+                        { required: true, message: '请输入准考证号', trigger: 'blur' }
+                           ]"
+                        >
+                            <el-input v-model="examNum.examNum"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div></el-col>
+            </el-row>
+        </div>
+
+
+        <div>
+            <el-row>
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                    <el-form :model="PhoneNum" ref="PhoneNum" label-width="100px" class="demo-dynamic">
+                        <el-form-item label="手机号码："
+                                      prop="PhoneNum"
+                                      :rules="[
+                        { required: true, message: '请输入手机号码', trigger: 'blur' },
+                         { validator:validMobile, message: '请输入正确的手机号码', trigger: ['blur', 'change'] }
+                           ]"
+                        >
+                            <el-input v-model="PhoneNum.PhoneNum"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div></el-col>
+            </el-row>
+        </div>
+
+
+        <div>
+            <el-row>
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                    <el-form :model="Email" ref="Email" label-width="100px" class="demo-dynamic">
+                        <el-form-item
+                                prop="email"
+                                label="邮箱地址："
+                                :rules="[
+                        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+                           ]"
+                        >
+                            <el-input v-model="Email.email"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div></el-col>
+            </el-row>
+        </div>
+
+
+    </div>
+    </el-row>
+
+    <el-row class = "active2" v-show="active === 1" title="邮箱验证" > <div >
+        <div style="height: 50px"></div>
+        <el-row >
+        <el-col :span="8"  :offset="6"><div class="grid-content">
+        <p>你的邮箱为：{{Email.email}}</p>
+        </div></el-col>
+        <el-col :span="8"  :offset="6"><div class="grid-content">
+        <el-form :model="code" ref="code" label-width="100px" class="demo-dynamic">
+        <el-form-item label="验证码" prop="code" class="pr"
+                      :rules="[
+                        { required: true, message: '请输入验证码', trigger: 'blur' },
+                        { validator:validateCheckCode, trigger: ['blur', 'change'] }
+                           ]"
+        >
+            <el-input prop="code" v-model="code.code" placeholder="验证码"></el-input>
+        </el-form-item>
+        </el-form>
+        </div></el-col>
+            <div style="width: 100px;position: relative;left: 650px;top: -63px;">
+            <el-button type="primary" @click="getCode()" class="code-btn" :disabled="!show">
+                <span v-show="show">发送验证码</span>
+                <span v-show="!show" class="count">{{count}} s</span>
+            </el-button>
+            </div>
+        </el-row>
+    </div>
+    </el-row>
+
+        <el-row class = "active1" v-show="active === 2"  title="修改密码"> <div >
+            <div style="height: 50px"></div>
+            <el-form :model="UpdatePass" status-icon  ref="UpdatePass" label-width="100px" class="demo-ruleForm">
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                <el-form-item label="密码" prop="pass"
+                :rules="[
+                { validator:validatePass, trigger: 'blur'}
+                ]">
+                    <el-input type="password" v-model="UpdatePass.pass" autocomplete="off" ></el-input>
+                </el-form-item>
+                </div></el-col>
+
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                <el-form-item label="确认密码" prop="checkPass"
+                              :rules="[
+                { validator:validatePass2, trigger: 'blur' }
+                ]"
+                >
+                    <el-input type="password" v-model="UpdatePass.checkPass" autocomplete="off"></el-input>
+                </el-form-item>
+                </div></el-col>
+                <el-col :span="8"  :offset="6"><div class="grid-content">
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm(UpdatePass)">提交</el-button>
+                    <el-button @click="resetForm('UpdatePass')">重置</el-button>
+                </el-form-item>
+                </div></el-col>
+            </el-form>
+        </div>
+        </el-row>
+        <el-row class = "active1" v-show="active === 3" title="激活成功" > <div >
+            <div style="height: 100px"></div>
+            <i class="el-icon-circle-check"></i>
+            <span>恭喜账号激活成功，请重新登录</span>
+            <p>倒计时跳转页面：{{count}} s</p>
+            <el-button type="primary" round @click="skipPage">跳转到登陆页面</el-button>
+        </div>
+        </el-row>
+    </div>
+    <div style="margin-top: -90px">
+        <el-col :span="8"  :offset="9"><div class="grid-content">
+        <el-button style="margin-top: 12px;" @click="back">上一步</el-button>
+        <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+        </div></el-col>
+    </div>
+
+</div>
+
+</div>
+    <script>
+        const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
+        var app = new Vue({
+            el:"#app",
+            data: {
+                checkId2:false,
+                checkPhone1:false,
+                checkEmail1:false,
+                active: 0,
+                IdNum:
+                    {
+                        IdNum: ""
+                    },
+                examNum: {
+                    examNum: ""
+                },
+                PhoneNum: {
+                    PhoneNum: ""
+                },
+                Email: {
+                    email: ""
+                },
+                code: {code:""},
+                show: true,
+                count: '',
+                UpdatePass:{
+                    pass:"",
+                    checkPass:""
+                },
+                validMobile: (rule, value, callback) => {
+                    if (value == '' || value == undefined) {
+                        callback()
+                    } else {
+                        let reg = /[0-9]{11}/
+                        if (!reg.test(value)) {
+                            callback(new Error('格式不对'))
+                        } else {
+                            app.checkPhone1=true;
+                            callback()
+
+                        }
+                    }
+                },
+                validID: (rule, value, callback) => {
+                    if (value == '' || value == undefined) {
+                        callback()
+                    } else {
+                        let reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+                        if (!reg.test(value)) {
+                            callback(new Error('身份证号码不正确'))
+                        }
+                    }
+
+                },
+                validateCheckCode:(rule, value, callback) => {
+                    if (!value) {
+                        callback(new Error('验证码不可为空'))
+                    } else {
+                        if (value !== '') {
+                            let reg = /^[0-9]{6}$/
+                            if (!reg.test(value)) {
+                                callback(new Error('请输入收到的6位随机验证码'))
+                            }
+                        }
+                        callback()
+                    }
+                },
+               validatePass:(rule, value, callback) => {
+
+                    if (value === '') {
+                        callback(new Error('请输入密码'));
+                    } else {
+                        if (app.UpdatePass.checkPass!=='') {
+                            app.$refs.UpdatePass.validateField('checkPass');
+                        }
+                        callback();
+                    }
+                },
+                validatePass2 : (rule, value, callback) => {
+                    if (value === '') {
+                        callback(new Error('请再次输入密码'));
+                    } else if (value !== app.UpdatePass.pass) {
+                        callback(new Error('两次输入密码不一致!'));
+                    } else {
+                        callback();
+                    }
+                }
+            },
+            methods:{
+
+                next:function(){
+                    if(this.active==0)
+                    {
+                        if(this.IdNum.IdNum!=""&&this.examNum.examNum!=""&&this.PhoneNum.PhoneNum!=""&&this.Email.email!=""){
+
+                            if(this.checkIdNum1()&&this.checkExamNum()&&this.checkPhone1&&this.checkEmail2(this.Email.email))
+                            {
+                                this.active++;
+                            }else
+                            {
+                                layer.msg("信息填写错误 请重新填写信息");
+                            }
+                        }
+                        else
+                        {
+                            layer.msg("当前步骤信息填写不全")
+                        }
+                    }
+                    if(this.active==1)
+                    {
+
+                        if(hex_md5(this.code.code)==sessionStorage.getItem("checkCode"))
+                        {
+                            sessionStorage.removeItem("checkCode");
+                            this.active++;
+
+                        }
+                        else
+                        {
+                            layer.msg("验证码错误请重新输入");
+                        }
+                    }
+                    if(this.active==2)
+                    {
+                        if(this.UpdatePass.pass!=""&&this.UpdatePass.checkPass!=""&&this.UpdatePass.pass==this.UpdatePass.checkPass)
+                        {
+                            this.active++;
+                        }
+                        else
+                        {
+                            layer.msg("密码填写错误 请重新输入");
+                        }
+                    }
+                    if(this.active==3)
+                    {
+                        this.Down();
+                    }
+                    if(this.active>3)
+                    {
+                        layer.msg("请点击重新登陆 或等待五秒后自动跳转");
+                    }
+                },
+                back:function()
+                {
+                    if (this.active!=0){
+                        if(this.active==3)
+                        {
+                            layer.msg("请点击重新登陆 或等待五秒后自动跳转");
+                        }else
+                        {
+                            this.active--;
+                        }
+                    }
+
+                },
+                checkIdNum1:function()
+                {
+                  var self=this;
+                  var boolean =false;
+                  $.ajax({
+                      url:"/checkIdNum",
+                      data:{"studentIdNum":self.IdNum.IdNum},
+                      type: "POST",
+                      async :false,
+                      success:function (res) {
+                          boolean=res;
+                      },
+                      error:function (res) {
+
+                      }
+                  });
+                    return boolean;
+                },
+                checkEmail2:function (email) {
+                    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+                    if (!email) {
+                        layer.msg("邮箱不能为空");
+                    }
+                     if (mailReg.test(email)) {
+                           return true;
+                        } else {
+                            layer.msg("请检查输入的邮箱格式是否正确");
+                            return false;
+                        }
+                },
+                checkExamNum:function(){
+                    var self=this;
+                    var boolean =false;
+                    $.ajax({
+                        url:"/studentExamNum",
+                        data:{
+                            "ExamNum":self.examNum.examNum,
+                            "IdNum":self.IdNum.IdNum
+                        },
+                        type: "POST",
+                        async :false,
+                        success:function (res) {
+                            boolean=res;
+                        },
+                        error:function (res) {
+
+                        }
+                    });
+                    return boolean;
+
+                },
+                getCode:function ()
+                 {
+                    let _this = this
+                    if (this.Email.email === '') {
+                        _this.$message.error('请先输入邮箱再点击获取验证码')
+                    } else {
+                        $.ajax({
+                            type: 'post',
+                            url: '/getCheckCode',
+                            data: {
+                                'email': this.Email.email
+                            },
+                            success:function (res) {
+
+                                sessionStorage.setItem('checkCode', hex_md5(res.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
+                            },
+                            error:function (res) {
+
+                            }
+                        })
+                        // 验证码倒计时
+                        if (!this.timer) {
+                            this.count = TIME_COUNT;
+                            this.show = false;
+                            this.timer = setInterval(() => {
+                                if (this.count > 0 && this.count <= TIME_COUNT) {
+                                    this.count--
+                                } else {
+                                    this.show = true
+                                    clearInterval(this.timer)
+                                    this.timer = null
+                                }
+                            }, 1000)
+                        }
+                    }
+                },
+                submitForm:function (forName) {
+                    var student = JSON.parse(sessionStorage.getItem("student"));
+                    var self = this;
+
+                    student.studentPhone=self.PhoneNum.PhoneNum;
+                    student.studentEmail=self.Email.email;
+                    $.ajax({
+                        url:"/userInsert",
+                        data:{
+                            "password":hex_md5(forName.pass),
+                            "studentPhone":self.PhoneNum.PhoneNum,
+                            "studentEmail":self.Email.email,
+                            "studentId":student.studentId
+                        },
+                        dataType:"Json",
+                        Type:"POST",
+                        success:function (res) {
+                                layer.alert("密码修改成功");
+                                self.active++;
+                        },
+                        error:function (res) {
+                            
+                        }
+                    });
+                },
+                resetForm:function (forName) {
+                    this.$nextTick(()=>{
+                        this.$refs[forName].resetFields();
+                    })
+
+                },
+                Down:function() {
+                    if (!this.timer) {
+                        this.count = 5;
+                        this.show = false;
+                        this.timer = setInterval(() => {
+                            if (this.count > 0 && this.count <= TIME_COUNT) {
+                                this.count--
+                                if(this.count==0)
+                                {
+                                    this.skipPage();
+                                }
+                            } else {
+                                this.show = true
+                                clearInterval(this.timer)
+                                this.timer = null
+                            }
+                        }, 1000)
+
+                    }
+
+                },
+                skipPage:function () {
+                    //强制跳转回学生登陆页面并清空当前登录信息
+                    sessionStorage.clear();
+                    top.location = '../../studentLogin.html';
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

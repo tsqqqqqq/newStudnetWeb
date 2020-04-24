@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <el-upload
+            style="display: inline"
+            :show-file-list="false"
+            :on-success="onSuccess"
+            :on-error="onError"
+            :before-upload="beforeUpload"
+            action="/system/basic/jl/import">
+        <el-button size="mini" type="success" :disabled="!enabledUploadBtn" :icon="uploadBtnIcon">{{btnText}}</el-button>
+    </el-upload>
+</div>
+
+
+<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+
+
+</body>
+</html>

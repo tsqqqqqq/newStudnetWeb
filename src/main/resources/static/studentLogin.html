@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="css/login.css">
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+
+	</head>
+	<body>
+
+		<div style="height: 80px;"></div>
+		<h1 class="page-title"></h1>
+		<div style="height: 200px;"></div>
+		<div class="login">
+			<div class="header">
+				<div class="switch" id="switch"><a class="switch_btn_focus" id="switch_qlogin" href="javascript:void(0);" tabindex="7">账号登录</a>
+					<a class="switch_btn two-title" id="switch_login" href="javascript:void(0);" tabindex="8"></a>
+					<div class="switch_bottom" id="switch_bottom" style="position: absolute; width: 64px; left: 0px;"></div>
+				</div>
+			</div>
+			<div class="web_qr_login" id="web_qr_login" style="display: block; height: 235px;">
+
+				<div class="web_login" id="web_login">
+					<div class="login-box">
+						<div class="login_form">
+							<form name="loginform" accept-charset="utf-8" id="login_form" class="loginForm"  method="post">
+								<input type="hidden" name="did" value="0" />
+								<input type="hidden" name="to" value="log" />
+								<div class="uinArea" id="uinArea">
+									<label class="input-tips" for="u">帐号：</label>
+									<div class="inputOuter" id="uArea">
+										<input type="text" id="u" name="studentIdNum" class="inputstyle" />
+
+									</div>
+								</div>
+								<div class="pwdArea" id="pwdArea">
+									<label class="input-tips" for="p">密码：</label>
+									<div class="inputOuter" id="pArea">
+										<input type="password" id="p" name="studentPassWord" class="inputstyle" />
+									</div>
+								</div>
+								<div style="padding-left:50px;margin-top:20px;">
+									<input type="button" value="登 录" style="width: 208px;" class="button_blue login-btn" />
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div>
+            <div id="studentLogin">
+			<div class="qlogin" id="qlogin" style="display: none; height: 235px;">
+				<div class="web_login tow-content" id="guanyu" style="padding: 2em 2em; color: #666; font-size: 14px; line-height: 24px;">
+					<div>
+						<el-row>
+							<el-col :span="36"  ><div class="grid-content">
+								<el-form :model="Email" ref="Email" label-width="100px" class="demo-dynamic">
+									<el-form-item
+											prop="email"
+											label="邮箱地址："
+											:rules="[
+                        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+                           ]"
+									>
+										<el-input v-model="Email.email" @blur="checkEmail1(Email.email)"></el-input>
+									</el-form-item>
+								</el-form>
+							</div></el-col>
+						</el-row>
+					</div>
+
+
+						<el-row :gutter="20">
+							<el-col :span="16"  ><div class="grid-content">
+								<el-form :model="code" ref="code" label-width="100px" class="demo-dynamic">
+									<el-form-item label="验证码" prop="code" class="pr"
+												  :rules="[
+                        { required: true, message: '请输入验证码', trigger: 'blur' },
+                        { validator:validateCheckCode, trigger: ['blur', 'change'] }
+                           ]"
+									>
+										<el-input prop="code" v-model="code.code" placeholder="验证码"></el-input>
+									</el-form-item>
+								</el-form>
+							</div></el-col>
+							<div>
+								<el-button type="primary" @click="getcode()" class="code-btn" :disabled="!show" size="mini " style="margin-top: 5px;margin-right: 2px;">
+									<span v-show="show">发送验证码</span>
+									<span v-show="!show" class="count">{{count}} s</span>
+								</el-button>
+							</div>
+						</el-row>
+					<el-button type="primary" @click="updatePassWord">找回密码</el-button>
+
+			</div>
+			</div>
+
+		</div>
+	</div>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="js/md5.js"></script>
+		<script src="js/sa.js"></script>
+		<script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				sessionStorage.clear();
+			})
+			var b=false;
+
+			// 你所有要改的代码全在这里   ↓↓↓↓↓ 
+			
+			var page_title = 'web新生报道-登陆';		// 页面标题
+			var two_title = '找回密码';			// 第二个卡片的标题(最好四个字)
+
+			// 第二个模板的内容
+			// var tow_content = '输入账号和密码，点击按钮登录即可';
+			//var tow_content = '本页面参考于此模板：<br/> <a href="http://www.jq22.com/demo/jQuery-dl20160111/" target="_blank">http://www.jq22.com/yanshi5518</a>';
+			
+			$('.login-btn').click(function() {
+
+				var student = {
+					studentIdNum: $('[name=studentIdNum]').val(),
+					studentPassWord: $('[name=studentPassWord]').val()
+				}
+				
+				if(student.studentIdNum == '' || student.studentPassWord == ''){
+					return layer.msg('请输入任意内容即可');
+				}
+				student.studentPassWord = hex_md5(student.studentPassWord);
+
+			if(b==true){
+             $.ajax({
+                 url:"/studentLoginController",
+                 data:{
+                 	"studentIdNum":student.studentIdNum,
+					 "studentPassWord":student.studentPassWord
+				 },
+                 datatype:"json",
+				 type:"POST",
+                 success:function(result){
+                     if(result!='')
+                     {
+                         setTimeout(function () {
+                             if(parent == window){
+                             	sessionStorage.setItem("student",JSON.stringify(result));
+                                 location.href = "index.html";
+                             }else{
+                                 parent.layer.closeAll('iframe');
+                                 parent.location.reload();
+                             }
+                         },500);
+                     }
+                     else
+					 {
+					 	layer.msg("密码错误请重新输入");
+					 }
+                 },
+                 error:function(result){
+                        console.log(result.status);
+                 }
+             })
+			}else
+			{
+				layer.msg("身份证输入错误 ! 请重新输入")
+
+			}
+			})
+
+			
+			// 你所有要改的代码全在这里   ↑↑↑↑↑	
+			
+			$("#u").blur(function () {
+				var IdNum = $('[name=studentIdNum]').val();
+
+				$.ajax({
+					url:"/checkIdNum",
+					data:{"studentIdNum":IdNum},
+					dataType:"json",
+					Type:"POST",
+					success:function (res) {
+						if(res==true)
+						{
+							b=true;
+						}
+						else
+						{
+							layer.msg("身份证输入错误 ! 请重新输入")
+
+						}
+					},
+					error:function () {
+						
+					}
+				})
+			})
+			
+			
+			// 替换属性
+			$('title').html(page_title);
+			$('[name=studentIdNum]').val();
+			$('[name=studentPassWord]').val();
+			$('.two-title').html(two_title);
+
+			$('#p').bind('keypress',function(event){
+				if(event.keyCode == "13") {
+					$('.login-btn').click();
+				}
+			});
+
+			
+		</script>
+		<!-- 卡片切换特效 -->
+		<script type="text/javascript">
+			$(function () {
+			    $('#switch_qlogin').click(function () {
+			        $('#switch_login').removeClass("switch_btn_focus").addClass('switch_btn');
+			        $('#switch_qlogin').removeClass("switch_btn").addClass('switch_btn_focus');
+			        $('#switch_bottom').animate({
+			            left: '0px',
+			            width: '70px'
+			        });
+			        $('#qlogin').css('display', 'none');
+			        $('#web_qr_login').css('display', 'block');
+			    });
+			    $('#switch_login').click(function () {
+			        $('#switch_login').removeClass("switch_btn").addClass('switch_btn_focus');
+			        $('#switch_qlogin').removeClass("switch_btn_focus").addClass('switch_btn');
+			        $('#switch_bottom').animate({
+			            left: '154px',
+			            width: '70px'
+			        });
+			        $('#qlogin').css('display', 'block');
+			        $('#web_qr_login').css('display', 'none');
+			    });
+			});
+			
+		</script>
+
+		<!--找回密码设置-->
+		<script>
+			const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
+			var app = new Vue({
+				el:"#studentLogin",
+				data:{
+					sa:sa,
+					Email:{email:""},
+					code:{code:""},
+					show: true,
+					count: '',
+					IdNum:"",
+					UpdatePass:{
+						pass:"",
+						checkPass:""
+					},
+					validateCheckCode:(rule, value, callback) => {
+						if (!value) {
+							callback(new Error('验证码不可为空'))
+						} else {
+							if (value !== '') {
+								let reg = /^[0-9]{6}$/
+								if (!reg.test(value)) {
+									callback(new Error('请输入收到的6位随机验证码'))
+								}
+							}
+							callback()
+						}
+					},
+				},
+				methods: {
+					getcode: function () {
+
+						let _this = this;
+						if (this.Email.email === '') {
+							_this.$message.error('请先输入邮箱再点击获取验证码');
+						}else if(this.IdNum === ""){
+							_this.$message.error('该邮箱不存在请重新输入');
+						} else {
+							$.ajax({
+								type: 'post',
+								url: '/getCheckCode',
+								data: {
+									'email': this.Email.email
+								},
+								success: function (res) {
+
+									sessionStorage.setItem('checkCode', hex_md5(res.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
+								},
+								error: function (res) {
+
+								}
+							})
+							// 验证码倒计时
+							if (!this.timer) {
+								this.count = TIME_COUNT;
+								this.show = false;
+								this.timer = setInterval(() => {
+									if (this.count > 0 && this.count <= TIME_COUNT) {
+										this.count--
+									} else {
+										this.show = true
+										clearInterval(this.timer)
+										this.timer = null
+									}
+								}, 1000)
+							}
+						}
+					},
+					//检查邮箱是否存在在数据库中
+					checkEmail1: function (email)
+					{
+						var self = this;
+						$.ajax({
+							url:"/checkEmail",
+							data:{"Email":email},
+							Type:"POST",
+							success:function (res) {
+									self.IdNum=res;
+							},
+							error:function (res) {
+
+							}
+						})
+					},
+					updatePassWord:function () {
+						if(this.code.code==""||this.Email.email==="")
+						{
+							this.$message.error('请填写邮箱地址以及验证码后再进行操作');
+						}
+						else if(hex_md5(this.code.code)!=sessionStorage.getItem("checkCode"))
+						{
+							this.$message.error('验证码错误请重新输入');
+						}else if(this.IdNum==="")
+						{
+							this.$message.error('该邮箱不存在请重新输入');
+						}
+						else
+						{
+							sa.$fast.showIframe("修改密码", 'NSW-html/user/UpdatePassWord.html?IdNum=' + this.IdNum,'300px','200px')
+						}
+					}
+			}
+
+			})
+		</script>
+
+	</body>
+</html>

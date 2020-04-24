@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>角色列表</title>
+
+
+    <!-- 所有的 css 资源 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../js/sa.js"></script>
+
+
+</head>
+<body>
+<!-- 防止margin向下击穿 -->
+<div style="margin-top: -1em;"><br></div>
+
+<div class="vue-box" >
+    <div style="font-family: 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+    width: 30%;margin: auto;text-align: center;">
+        <p>在录取人数大于预设班级时选择需要添加的专业即可</p>
+    </div>
+    <div style="width: 20%;margin: 20px auto">
+    <template>
+        <el-select v-model="value" filterable placeholder="请选择专业" @change="studentNumber">
+            <el-option
+                    v-for="item in dataList"
+                    :key="item.majorId"
+                    :label="item.majorName"
+                    :value="item.majorId">
+            </el-option>
+        </el-select>
+    </template>
+        <div style="margin:20px 0px;">
+            <p>当前录取人数为：<span id="studentNumber"></span></p>
+        </div>
+        <div>
+            <p></p>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+<script>
+    var app = new Vue({
+        el: '.vue-box',
+        data: {
+            activeNames: '1',
+            sa: sa, 	// 超级对象
+            p: {	// 查询参数
+                name: '',
+            },
+            dataList: [],
+            value: '',// 数据集合
+            id:''
+        },
+        created:function()
+        {
+            this.MajorList();
+        },
+        methods: {
+
+            MajorList:function () {
+                var sfle = this;
+                $.ajax({
+                    url: "/MajorList",
+                    dataType: "json",
+                    Type: "post",
+                    async: false,
+                    success: function (res) {
+                        sfle.dataList = res;
+                    },
+                    error: function (res) {
+
+                    }
+
+                });
+            },
+            studentNumber:function(MajorId)
+            {
+                this.id =MajorId;
+                    $.ajax({
+                        url:"/studentNumber",
+                        data:{"majorId":MajorId},
+                        dataType:"json",
+                        success:function (res) {
+                            $("#studentNumber").html(res);
+                        }
+                    })
+
+            }
+        }
+    });
+
+
+</script>
+
+</body>
+</html>

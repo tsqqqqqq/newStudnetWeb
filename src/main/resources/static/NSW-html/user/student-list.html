@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户列表</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <!-- 所有的 css 资源 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../kj/laydate/laydate.js"></script>
+    <script src="../../js/sa.js"></script>
+    <script src="../../js/user-list.js"></script>
+
+    <style type="text/css">
+
+    </style>
+
+</head>
+<body>
+
+<!-- 防止margin向下击穿 -->
+<div style="margin-top: -1em;"><br></div>
+
+<div class="vue-box" style="display: none;" :style="'display: block;'">
+
+    <!-- 参数栏 -->
+    <div class="c-panel">
+        <div class="c-title">检索参数</div>
+        <el-form ref="form">
+
+            <div class="c-item">
+                <label class="c-label">昵称：</label>
+                <el-input size="mini" v-model="p.username" placeholder="模糊搜索" @keyup.enter="f5"></el-input>
+            </div>
+            <div class="c-item" style="min-width: 0px;">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="f5">查询</el-button>
+            </div>
+
+            <!-- <br />
+            <div class="c-item">
+                <label class="c-label">注册方式：</label>
+                <el-select size="mini" v-model="p.create_type">
+                    <el-option label="全部" :value="0"></el-option>
+                    <el-option label="账号注册" :value="1"></el-option>
+                    <el-option label="手机号注册" :value="2"></el-option>
+                    <el-option label="邮箱注册" :value="3"></el-option>
+                </el-select>
+            </div>
+             -->
+            <br />
+
+
+        </el-form>
+
+    </div>
+
+    <!-- 数据栏 -->
+    <div class="c-panel">
+        <div class="c-title">录入列表</div>
+        <el-table class="data-table" :data="dataList" size="mini"  style="width: 100%">
+
+            <el-table-column label="编号" prop="studentId" width="70px" > </el-table-column>
+            <el-table-column label="姓名" prop="studentName" width="100px">
+                <template slot-scope="scope">
+                    <div style="float: left; width: 130px; line-height: 20px;">
+                        <b>{{scope.row.studentName}}</b>
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="年龄" prop="studentAge"> </el-table-column>
+            <el-table-column label="性别" prop="studentSex"></el-table-column>
+
+
+
+            <el-table-column label="学生类型" >
+                <template slot-scope="scope">
+                    <span style="" v-if="scope.row.studentType == 1">应届生</span>
+                    <span style="" v-if="scope.row.studentType == 0">专升本</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="激活时间" prop="studentActivaTime"></el-table-column>
+            <el-table-column label="状态">
+                <template slot-scope="scope">
+                    <span style="color: green;" v-if="scope.row.studentInFo == 1">已激活</span>
+                    <span style="color: red;" v-if="scope.row.studentInFo == 0">未激活</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="address" label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" class="c-button" icon="el-icon-postcard" @click="sa.$fast.showIframe(scope.row.studentName, 'student-show.html?id=' + scope.row.studentId)">查看</el-button>
+                    <el-button type="warning" class="c-button" icon="el-icon-help" @click="sa.$fast.showIframe(scope.row.studentName, 'student-update.html?id=' + scope.row.studentId)">修改</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <!-- 分页 -->
+        <div class="page-box">
+            <el-pagination background
+                           layout="total, prev, pager, next, sizes, jumper"
+                           :current-page.sync="page.pageNo"
+                           :page-size.sync="page.pageSize"
+                           :total="page.count"
+                           :page-sizes="[1, 10, 20, 30, 40, 50, 100]"
+                           @current-change="pageNo_f5(page.pageNo,page.pageSize)"
+                           @size-change="pageSize_f5(page.pageNo,page.pageSize)">
+            </el-pagination>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+
+    // 渲染日期选择插件
+    function init_laydate() {
+        // 开始日期
+        laydate.render({
+            elem: '.start_time input',
+            type: 'date',
+            done: function(value, date){
+                app.p.start_time = value;
+            }
+        });
+        // 结束日期
+        laydate.render({
+            elem: '.end_time input',
+            type: 'date',
+            done: function(value, date){
+                app.p.end_time = value;
+            }
+        });
+    }
+
+
+
+    var app = new Vue({
+        el: '.vue-box',
+        data: {
+            sa:sa,
+            p: {	// 查询参数
+                username: '',
+            },
+            page: {	// 分页信息
+                pageNo: 1,
+                pageSize: 10,
+                count: 0
+            },
+            dataList:[]
+        },
+        created: function(){
+            this.pageSum();
+            this.pageSelect(this.page.pageNo,this.page.pageSize)
+        },
+        methods: {
+            // 数据刷新
+            f5: function () {
+               var self = this;
+               if(self.p.username!="") {
+                   $.ajax({
+                       url: "/likeName",
+                       data: {
+                           "studentName": self.p.username,
+                           "pageNo": self.page.pageNo,
+                           "pageSize": self.page.pageSize
+                       },
+                       type: "POST",
+                       success: function (res) {
+                           self.dataList = res;
+                           self.page.count = res.length;
+                       },
+                       error: function () {
+
+                       }
+                   });
+               }else
+               {
+                   this.pageSelect(this.page.pageNo,this.page.pageSize)
+               }
+            },
+            // 分页刷新
+            pageNo_f5: function (pageNo,pageSize) {
+                this.pageSelect(pageNo,pageSize);
+            },
+            pageSize_f5: function (pageNo,pageSize) {
+                this.$message('切换页大小：' + pageSize);
+                this.pageSelect(pageNo,pageSize);
+            },
+            pageSelect:function(pageNo,pageSize){
+                var self =this;
+                $.ajax({
+                    url:"/studentList",
+                    data:{
+                        "pageNo":pageNo,
+                        "pageSize":pageSize
+                    },
+                    dataType:'json',
+                    success:function(res)
+                    {
+
+                        self.dataList=res;
+                        self.page.count=res.length;
+
+                    },
+                    error:function (res) {
+                        console.log(res.status);
+                    }
+                })
+            },
+            pageSum:function(){
+                var self =this;
+                $.ajax({
+                    url:"/StudentPageNo",
+                    dataType:'json',
+                    success:function(res)
+                    {
+                        self.page.count=res.length;
+                    },
+                    error:function (res) {
+                        console.log(res.status);
+                    }
+                })
+            }
+
+
+        },
+        mounted:function(){
+            init_laydate();
+        }
+    })
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

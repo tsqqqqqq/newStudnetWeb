@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>主页</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			body {
+				background-color: #EEE;
+			}
+
+			.app {
+				font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+			}
+
+			.content-box {
+				margin: 1em;
+				padding: 1em;
+				background-color: #FFF;
+				color: #666;
+			}
+
+			.el-tag{border-radius: 1px;}
+
+			/*800之下*/
+			@media(max-width: 800px) {
+				.kapian {
+					width: 100% !important;
+					margin-right: 0px !important;
+				}
+
+				.saoma {
+					display: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="app">
+
+			<div class="content-box">
+				<div style="padding: 1em; border-left: 5px #2D8CF0 solid; background-color: #EEE;">
+					<big><big>Welcome to 新生报道后台管理系统 </big></big>
+
+				</div>
+			</div>
+
+
+			<div class="content-box">
+				<div class="kapian" style="font-size: 0.9em; line-height: 1.6em; width: 30%; float: left; margin-right: 5%;">
+					<el-divider content-position="left">
+						<big><big>2020级录取新生男女占比</big></big>
+					</el-divider>
+					<div id="main" style="width: 100%;height:400px;"></div>
+				</div>
+				<div  class="kapian" style="font-size: 0.9em; line-height: 1.6em; width: 60%; float: left;">
+					<div id="studentMap" style="width: 100%;height: 400px;"></div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+			<!--
+			<div class="content-box">
+				<el-divider content-position="left">
+					<big><big>更新日志</big></big>
+				</el-divider>
+				<div class="kapian" style="font-size: 0.9em; line-height: 1.6em;">
+					<ul style="padding-left: 1em; line-height: 1.5em;">
+
+						<div><br></div>
+						<li>
+							<b> <el-tag size="mini">版本 v1.1.4</el-tag></b>
+							&nbsp;&nbsp;2019-10-17
+						</li>
+						<li>重写了一下简介</li>
+						<li>优化主题样式</li>
+						<div><br></div>
+
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.1.3</el-tag></b>
+							&nbsp;&nbsp;2019-9-3
+						</li>
+						<li>更改初始化方式</li>
+						<li>优化UI样式</li>
+						<li>增加新主题：灰色-展开</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.1.2</el-tag></b>
+							&nbsp;&nbsp;2019-7-16
+						</li>
+						<li>增加右键菜单的失去焦点事件，失去焦点自动消失</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.1.1</el-tag></b>
+							&nbsp;&nbsp;2019-6-26
+						</li>
+						<li>优化卡片切换动画，更流畅了，并且添加loading图标，视觉上更加顺畅</li>
+						<li>新增悬浮窗口功能，在卡片标题处右击试试吧</li>
+						<li>更换登录模板页，更漂亮了</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.1.0</el-tag></b>
+							&nbsp;&nbsp;2019-6-24
+						</li>
+						<li>修复bug：鼠标悬浮page-title时，偶尔动画混乱的bug</li>
+						<li>修复bug：优化折叠动画，更流畅了</li>
+						<li>集成swiper，窗口切换，更加高大上了</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.8</el-tag></b>
+							&nbsp;&nbsp;2019-5-28
+						</li>
+						<li>修复bug：菜单折叠时，菜单项箭头仍然显示的问题</li>
+						<li>修复bug：在手机端菜单折叠时，右侧信息排版发生混乱的问题</li>
+						<li>调整了一下字体大小，看着更顺眼了</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.7</el-tag></b>
+							&nbsp;&nbsp;2019-5-25
+						</li>
+						<li>优化一些动画效果</li>
+						<li>增加模板页：轮播图管理</li>
+						<li>一些样式优化</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.6</el-tag></b>
+							&nbsp;&nbsp;2019-5-22
+						</li>
+						<li>添加了菜单预览模板(tree树)</li>
+						<li>修复bug：菜单分配权限时，父子级不关联的问题</li>
+						<li>一些样式优化</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.5</el-tag></b>
+							&nbsp;&nbsp;2019-5-18
+						</li>
+						<li>添加了权限中心模板(tree权限树)</li>
+						<li>优化用户列表模板，弹出式的修改</li>
+						<li>一些其它样式优化</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.4</el-tag></b>
+							&nbsp;&nbsp;2019-5-15
+						</li>
+						<li>优化折叠动画，避免文字闪动现象</li>
+						<li>sp.setMenuList();接口增加show_list参数，可灵活控制部分菜单的显示与隐藏</li>
+						<li>一些样式优化</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.2</el-tag></b>
+							&nbsp;&nbsp;2019-5-14
+						</li>
+						<li>添加文章管理模板(wangEditor富文本编辑器)</li>
+						<li>改写了表格里按钮的样式，更鲜艳，增加点击感</li>
+						<li>菜单列表里可以指定is_show=false，使菜单成为隐藏菜单</li>
+						<li>
+							重写了一些接口，可以更加方便的与你的系统集成
+						</li>
+						<div><br></div>
+
+						<li>
+							<b> <el-tag size="mini">版本 v1.0.1</el-tag></b>
+							&nbsp;&nbsp;2019-5-5
+						</li>
+						<li>
+							修复周日显示周0的bug
+						</li>
+						<li>
+							主题更换时高亮显示，方便区分
+						</li>
+						<li>增加三级菜单支持</li>
+						<div><br></div>
+
+						<li>
+							<b><el-tag size="mini">版本 v1.0.0</el-tag></b>
+							&nbsp;&nbsp;2019-5-2
+						</li>
+						<li>第一个版本出炉</li>
+						<li>功能持续更新中...</li>
+					</ul>
+				</div>
+			</div>
+		-->
+			<br><br>
+
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/echarts@4.1.0/dist/echarts.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/echarts@4.1.0/map/js/china.js"></script>
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script type="text/javascript">
+			Vue.config.productionTip = false;
+		</script>
+		<script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '.app',
+				data: {
+
+				},
+				methods: {
+					// 没了
+					meile: function() {
+						this.$message({
+							message: '没了还点',
+							type: 'warning'
+						});
+					},
+					// 显示文档页面
+					openDoc: function() {
+						parent.sp.selectMenu(11);
+					},
+
+				}
+			})
+		</script>
+		<script>
+			var dataMap=new Array();
+			$.ajax({
+				url:"/proportion",
+				Type:"POST",
+				async:"true",
+				success:function (res) {
+					$.each(res,function (key,value) {
+					var data={
+						"value":value,
+						"name":key
+					};
+					dataMap.push(data);
+
+				});
+					var myChart = echarts.init(document.getElementById('main'));
+					option = {
+						tooltip: {
+							trigger: 'item',
+							formatter: '{a} <br/>{b} : {c} ({d}%)'
+						},
+						series: [
+							{
+								name: '访问来源',
+								type: 'pie',
+								radius: '55%',
+								center: ['50%', '60%'],
+								data: dataMap,
+								emphasis: {
+									itemStyle: {
+										shadowBlur: 10,
+										shadowOffsetX: 0,
+										shadowColor: 'rgba(0, 0, 0, 0.5)'
+									}
+								}
+							}
+						]
+					};
+
+					myChart.setOption(option);
+				},
+				error:function (res) {
+					
+				}
+			});
+
+		</script>
+
+		<script>
+			var mapEchart = echarts.init(document.getElementById('studentMap'));
+
+			var name_title = "桂林电子科技大学信息科技学院2020年各省市计划录取人数(模拟数据)"
+			var subname = '数据爬取自千栀网\n，\n上海、浙江无文理科录取人数'
+			var nameColor = " rgb(55, 75, 113)"
+			var name_fontFamily = '等线'
+			var subname_fontSize = 15
+			var name_fontSize = 18
+			var mapName = 'china'
+			var data = [
+				{name:"北京",value:177},
+				{name:"天津",value:42},
+				{name:"河北",value:102},
+				{name:"山西",value:81},
+				{name:"内蒙古",value:47},
+				{name:"辽宁",value:67},
+				{name:"吉林",value:82},
+				{name:"黑龙江",value:66},
+				{name:"上海",value:24},
+				{name:"江苏",value:92},
+				{name:"浙江",value:114},
+				{name:"安徽",value:109},
+				{name:"福建",value:116},
+				{name:"江西",value:91},
+				{name:"山东",value:119},
+				{name:"河南",value:137},
+				{name:"湖北",value:116},
+				{name:"湖南",value:114},
+				{name:"重庆",value:91},
+				{name:"四川",value:125},
+				{name:"贵州",value:62},
+				{name:"云南",value:83},
+				{name:"西藏",value:9},
+				{name:"陕西",value:80},
+				{name:"甘肃",value:56},
+				{name:"青海",value:10},
+				{name:"宁夏",value:18},
+				{name:"新疆",value:67},
+				{name:"广东",value:123},
+				{name:"广西",value:59},
+				{name:"海南",value:14},
+			];
+
+			var geoCoordMap = {};
+			var toolTipData = [
+				{name:"北京",value:[{name:"文科",value:95},{name:"理科",value:82}]},
+				{name:"天津",value:[{name:"文科",value:22},{name:"理科",value:20}]},
+				{name:"河北",value:[{name:"文科",value:60},{name:"理科",value:42}]},
+				{name:"山西",value:[{name:"文科",value:40},{name:"理科",value:41}]},
+				{name:"内蒙古",value:[{name:"文科",value:23},{name:"理科",value:24}]},
+				{name:"辽宁",value:[{name:"文科",value:39},{name:"理科",value:28}]},
+				{name:"吉林",value:[{name:"文科",value:41},{name:"理科",value:41}]},
+				{name:"黑龙江",value:[{name:"文科",value:35},{name:"理科",value:31}]},
+				{name:"上海",value:[{name:"文科",value:12},{name:"理科",value:12}]},
+				{name:"江苏",value:[{name:"文科",value:47},{name:"理科",value:45}]},
+				{name:"浙江",value:[{name:"文科",value:57},{name:"理科",value:57}]},
+				{name:"安徽",value:[{name:"文科",value:57},{name:"理科",value:52}]},
+				{name:"福建",value:[{name:"文科",value:59},{name:"理科",value:57}]},
+				{name:"江西",value:[{name:"文科",value:49},{name:"理科",value:42}]},
+				{name:"山东",value:[{name:"文科",value:67},{name:"理科",value:52}]},
+				{name:"河南",value:[{name:"文科",value:69},{name:"理科",value:68}]},
+				{name:"湖北",value:[{name:"文科",value:60},{name:"理科",value:56}]},
+				{name:"湖南",value:[{name:"文科",value:62},{name:"理科",value:52}]},
+				{name:"重庆",value:[{name:"文科",value:47},{name:"理科",value:44}]},
+				{name:"四川",value:[{name:"文科",value:65},{name:"理科",value:60}]},
+				{name:"贵州",value:[{name:"文科",value:32},{name:"理科",value:30}]},
+				{name:"云南",value:[{name:"文科",value:42},{name:"理科",value:41}]},
+				{name:"西藏",value:[{name:"文科",value:5},{name:"理科",value:4}]},
+				{name:"陕西",value:[{name:"文科",value:38},{name:"理科",value:42}]},
+				{name:"甘肃",value:[{name:"文科",value:28},{name:"理科",value:28}]},
+				{name:"青海",value:[{name:"文科",value:5},{name:"理科",value:5}]},
+				{name:"宁夏",value:[{name:"文科",value:10},{name:"理科",value:8}]},
+				{name:"新疆",value:[{name:"文科",value:36},{name:"理科",value:31}]},
+				{name:"广东",value:[{name:"文科",value:63},{name:"理科",value:60}]},
+				{name:"广西",value:[{name:"文科",value:29},{name:"理科",value:30}]},
+				{name:"海南",value:[{name:"文科",value:8},{name:"理科",value:6}]},
+			];
+
+			/*获取地图数据*/
+			mapEchart.showLoading();
+			var mapFeatures = echarts.getMap(mapName).geoJson.features;
+			mapEchart.hideLoading();
+			mapFeatures.forEach(function(v) {
+				// 地区名称
+				var name = v.properties.name;
+				// 地区经纬度
+				geoCoordMap[name] = v.properties.cp;
+
+			});
+
+
+
+			var max = 480,
+					min = 9; // todo
+			var maxSize4Pin = 100,
+					minSize4Pin = 20;
+
+			var convertData = function(data) {
+				var res = [];
+				for (var i = 0; i < data.length; i++) {
+					var geoCoord = geoCoordMap[data[i].name];
+					if (geoCoord) {
+						res.push({
+							name: data[i].name,
+							value: geoCoord.concat(data[i].value),
+						});
+					}
+				}
+				return res;
+			};
+			option = {
+				title: {
+					text: name_title,
+					subtext: subname,
+					x: 'center',
+					textStyle: {
+						color: nameColor,
+						fontFamily: name_fontFamily,
+						fontSize: name_fontSize
+					},
+					subtextStyle:{
+						fontSize:subname_fontSize,
+						fontFamily:name_fontFamily
+					}
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: function(params) {
+						if (typeof(params.value)[2] == "undefined") {
+							var toolTiphtml = ''
+							for(var i = 0;i<toolTipData.length;i++){
+								if(params.name==toolTipData[i].name){
+									toolTiphtml += toolTipData[i].name+':<br>'
+									for(var j = 0;j<toolTipData[i].value.length;j++){
+										toolTiphtml+=toolTipData[i].value[j].name+':'+toolTipData[i].value[j].value+"<br>"
+									}
+								}
+							}
+
+							return toolTiphtml;
+						} else {
+							var toolTiphtml = ''
+							for(var i = 0;i<toolTipData.length;i++){
+								if(params.name==toolTipData[i].name){
+									toolTiphtml += toolTipData[i].name+':<br>'
+									for(var j = 0;j<toolTipData[i].value.length;j++){
+										toolTiphtml+=toolTipData[i].value[j].name+':'+toolTipData[i].value[j].value+"<br>"
+									}
+								}
+							}
+							return toolTiphtml;
+						}
+					}
+				},
+				// legend: {
+				//     orient: 'vertical',
+				//     y: 'bottom',
+				//     x: 'right',
+				//     data: ['credit_pm2.5'],
+				//     textStyle: {
+				//         color: '#fff'
+				//     }
+				// },
+				visualMap: {
+					show: true,
+					min: 0,
+					max: 200,
+					left: 'left',
+					top: 'bottom',
+					text: ['高', '低'], // 文本，默认为数值文本
+					calculable: true,
+					seriesIndex: [1],
+					inRange: {
+						// color: ['#3B5077', '#031525'] // 蓝黑
+						// color: ['#ffc0cb', '#800080'] // 红紫
+						// color: ['#3C3B3F', '#605C3C'] // 黑绿
+						// color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+						// color: ['#23074d', '#cc5333'] // 紫红
+						color: ['#00467F', '#A5CC82'] // 蓝绿
+						// color: ['#1488CC', '#2B32B2'] // 浅蓝
+						// color: ['#00467F', '#A5CC82'] // 蓝绿
+						// color: ['#00467F', '#A5CC82'] // 蓝绿
+						// color: ['#00467F', '#A5CC82'] // 蓝绿
+						// color: ['#00467F', '#A5CC82'] // 蓝绿
+
+					}
+				},
+				/*工具按钮组*/
+				// toolbox: {
+				//     show: true,
+				//     orient: 'vertical',
+				//     left: 'right',
+				//     top: 'center',
+				//     feature: {
+				//         dataView: {
+				//             readOnly: false
+				//         },
+				//         restore: {},
+				//         saveAsImage: {}
+				//     }
+				// },
+				geo: {
+					show: true,
+					map: mapName,
+					label: {
+						normal: {
+							show: false
+						},
+						emphasis: {
+							show: false,
+						}
+					},
+					roam: true,
+					itemStyle: {
+						normal: {
+							areaColor: '#031525',
+							borderColor: '#3B5077',
+						},
+						emphasis: {
+							areaColor: '#2B91B7',
+						}
+					}
+				},
+				series: [{
+					name: '散点',
+					type: 'scatter',
+					coordinateSystem: 'geo',
+					data: convertData(data),
+					symbolSize: function(val) {
+						return val[2] / 10;
+					},
+					label: {
+						normal: {
+							formatter: '{b}',
+							position: 'right',
+							show: true
+						},
+						emphasis: {
+							show: true
+						}
+					},
+					itemStyle: {
+						normal: {
+							color: '#05C3F9'
+						}
+					}
+				},
+					{
+						type: 'map',
+						map: mapName,
+						geoIndex: 0,
+						aspectScale: 0.75, //长宽比
+						showLegendSymbol: false, // 存在legend时显示
+						label: {
+							normal: {
+								show: true
+							},
+							emphasis: {
+								show: false,
+								textStyle: {
+									color: '#fff'
+								}
+							}
+						},
+						roam: true,
+						itemStyle: {
+							normal: {
+								areaColor: '#031525',
+								borderColor: '#3B5077',
+							},
+							emphasis: {
+								areaColor: '#2B91B7'
+							}
+						},
+						animation: false,
+						data: data
+					},
+					{
+						name: '点',
+						type: 'scatter',
+						coordinateSystem: 'geo',
+						symbol: 'pin', //气泡
+						symbolSize: function(val) {
+							var a = (maxSize4Pin - minSize4Pin) / (max - min);
+							var b = minSize4Pin - a * min;
+							b = maxSize4Pin - a * max;
+							return a * val[2] + b;
+						},
+						label: {
+							normal: {
+								show: true,
+								textStyle: {
+									color: '#fff',
+									fontSize: 9,
+								}
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: '#F62157', //标志颜色
+							}
+						},
+						zlevel: 6,
+						data: convertData(data),
+					},
+					{
+						name: 'Top 5',
+						type: 'effectScatter',
+						coordinateSystem: 'geo',
+						data: convertData(data.sort(function(a, b) {
+							return b.value - a.value;
+						}).slice(0, 5)),
+						symbolSize: function(val) {
+							return val[2] / 10;
+						},
+						showEffectOn: 'render',
+						rippleEffect: {
+							brushType: 'stroke'
+						},
+						hoverAnimation: true,
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'right',
+								show: true
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: 'yellow',
+								shadowBlur: 10,
+								shadowColor: 'yellow'
+							}
+						},
+						zlevel: 1
+					},
+
+				]
+			};
+			mapEchart.setOption(option);
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>角色列表</title>
+
+
+    <!-- 所有的 css 资源 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../js/sa.js"></script>
+
+
+</head>
+<body>
+<!-- 防止margin向下击穿 -->
+<div style="margin-top: -1em;"><br></div>
+
+<div class="vue-box" >
+    <template>
+        <el-transfer
+                :titles="['所有宿舍列表','已选中宿舍列表']"
+                filterable
+                :filter-method="filterMethod"
+                filter-placeholder="请输入公寓名称"
+                v-model="value"
+                :data="data">
+        </el-transfer>
+    </template>
+
+
+</div>
+
+<script>
+    const dataList=[];
+    const dormitoryNum=[];
+    const dormitoryAddr=[];
+    $.ajax({
+        url:"/NotClassDormitoryList",
+        type:"post",
+        success:function (res) {
+            $.each(res,function (key,val) {
+                dormitoryAddr.push(val.dormitoryAddr);
+                dataList.push({
+                    label: val.dormitoryNum,
+                    key: val.dormitoryId,
+                    pinyin: dormitoryAddr[key]
+                })
+
+            })
+
+        },
+        error:function (res) {
+
+        }
+    })
+    var Main = {
+        data() {
+            return {
+                data: dataList,
+                value: [],
+                filterMethod(query, item) {
+                    return item.pinyin.indexOf(query) > -1;
+                }
+            };
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('.vue-box')
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>角色列表</title>
+
+
+    <!-- 所有的 css 资源 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+    <link rel="stylesheet" href="../../css/class.css">
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../js/sa.js"></script>
+
+
+</head>
+<body>
+<!-- 防止margin向下击穿 -->
+<div style="margin-top: -1em;"><br></div>
+
+<div class="vue-box">
+
+    <!-- 参数栏 -->
+    <div class="c-panel">
+        <div class="c-title">检索参数</div>
+        <el-form ref="form">
+            <div class="c-item">
+                <label class="c-label">名称：</label>
+                <el-input size="mini" v-model="p.username" placeholder="模糊搜索" @keyup.enter="f5"></el-input>
+            </div>
+            <div class="c-item" style="min-width: 0px;">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="f5">查询</el-button>
+            </div>
+            <div class="c-item" style="min-width: 0px;">
+                <el-button type="primary" icon="el-icon-thumb" size="mini" @click="ClassAdd">添加</el-button>
+            </div>
+        </el-form>
+
+    </div>
+
+    <div class="c-panel c-table">
+        <div class="c-title" >专业列表</div>
+        <el-collapse v-model="activeNames"  v-for="(item, index) in dataList" :key="index" :name="index" @change="handleChange" accordion @click="ClassList">
+            <el-collapse-item v-bind:title="item.majorName" v-bind:name="dataList[index].majorId" >
+                <div class="class_box">
+                            <div v-for="(item, index) in classList" :key="index" :name="index" class="class_btn">
+                                <el-button type="primary" name="item.classId" @click="ClassLayer(item.classId)">{{item.classNum}}</el-button>
+                            </div>
+                </div>
+            </el-collapse-item>
+
+        </el-collapse>
+
+    </div>
+
+
+</div>
+<script>
+    var app = new Vue({
+        el: '.vue-box',
+        data: {
+            activeNames:'1',
+            sa: sa, 	// 超级对象
+            p: {	// 查询参数
+                name: '',
+            },
+            dataList:[],
+            classList:[]
+
+        },
+        methods: {
+            handleChange:function(id) {
+                if(id!="")
+                {
+                    this.ClassList(id);
+                }
+            },
+            // 刷新
+            f5: function(){
+                sa.ajax2('/role/getList', {}, function(res){
+                    this.dataList = sa.$util.listAU();	// 数据
+                }.bind(this));
+            },
+            MajorList:function () {
+               var sfle = this;
+                $.ajax({
+                    url:"/MajorList",
+                    dataType:"json",
+                    Type:"post",
+                    async:false,
+                    success:function(res)
+                    {
+                       sfle.dataList= res;
+                    },
+                    error:function (res) {
+
+                    }
+                });
+
+            },
+            ClassList:function (id) {
+
+                var sfle = this;
+                $.ajax({
+                    url: "/classList",
+                    data:{"majorId":id},
+                    dataType:"json",
+                    type:"post",
+                    success:function (res) {
+                        if(res!=null) {
+                            sfle.classList = res;
+                        }
+                        else
+                        {
+                            layer.msg("暂无班级信息");
+                        }
+
+                        },
+                    error:function (res) {
+                        layer.msg("暂无班级信息");
+                    }
+                })
+
+            },
+            ClassLayer:function(id)
+            {
+                layer.open({
+                    type:2,
+                    content:"class-show.html",
+                    area:['90%','90%'],
+                    success:function (layero,index) {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.child(id);
+                    }
+                })
+            },
+            ClassAdd:function(){
+
+                layer.open({
+                    type:2,
+                    title:"班级添加",
+                    content:"class-add.html",
+                    area:['90%','90%'],
+                    btn:['添加','取消'],
+                    btn1:function(layero,index){
+                        var openPage = window[index.find('iframe')[0]['name']];
+                        var id= openPage.app.id;
+                        $.ajax({
+                           url:"/classAdd",
+                           data:{"MajorId":id},
+                           dataType:"Json",
+                            Type: "POST",
+                            success:function (res) {
+                                layer.msg(res);
+                                if (res == false)
+                                {
+                                    layer.msg("添加失败 ")
+                                }else
+                                {
+                                    layer.mas("添加成功")
+                                }
+                            },
+                            error:function (res) {
+
+                            }
+                        });
+
+                    }
+                })
+            }
+
+        },
+        created: function(){
+
+            this.MajorList();
+        }
+    })
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

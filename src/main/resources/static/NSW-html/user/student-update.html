@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../../css/sa.css">
+    <link rel="stylesheet" href="../../css/student_show.css">
+    <style>
+        .el-row {
+            margin-bottom: 20px;
+        &:last-child {
+             margin-bottom: 0;
+         }
+        }
+        .el-col {
+            border-radius: 4px;
+        }
+        .bg-purple-dark {
+            background: #99a9bf;
+        }
+        .bg-purple {
+            background: #d3dce6;
+        }
+        .bg-purple-light {
+            background: #e5e9f2;
+        }
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        .row-bg {
+            padding: 10px 0;
+            background-color: #f9fafc;
+        }
+    </style>
+
+
+
+    <!-- 所有的 js 资源 -->
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
+    <script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
+
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <script src="../../js/sa.js"></script>
+
+
+</head>
+<body>
+<div class="vue-box">
+    <div class="box-content" >
+        <el-row :gutter="20">
+            <div>
+
+                <el-col :span="6">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">姓名：</label>
+                            <span>{{student.studentName}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="4">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">性别：</label>
+
+                            <span>{{student.studentSex}}</span>
+
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="4">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">年龄：</label>
+                            <span>{{student.studentAge}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">学生类型：</label>
+
+                            <span>{{student.studentType}}</span>
+
+                        </div>
+                    </div>
+                </el-col>
+
+                <br/><br/><br/><br/>
+
+                <el-col :span="12">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">身份证号码：</label>
+                            <span>{{student.studentIdNum}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="9">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">准考证号码：</label>
+                            <span>{{student.studentExamNum}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+
+                <br/><br/><br/><br/>
+
+                <el-col :span="12">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">家庭地址：</label>
+                            <span>{{student.studentAddr}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+
+                <el-col :span="9">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">手机号码：</label>
+                            <span>{{student.studentPhone}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <br/><br/><br/><br/>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">录取专业：</label>
+                            <span>{{student.studentMajor}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">录取班级：</label>
+                            <span>{{student.classId}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">宿舍编号：</label>
+                            <span>{{student.dormitoryId}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+
+                <br/><br/><br/><br/>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">邮件：</label>
+                            <span>{{student.studentEmail}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">是否激活：</label>
+                            <span>{{student.studentInFo}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="7">
+                    <div class="grid-content bg-purple" style="height: 50px;  ">
+                        <div class="show-content">
+                            <label class="c-label show-label">应缴金额：</label>
+                            <span>{{student.studentMoney}}</span>
+                        </div>
+                    </div>
+                </el-col>
+
+
+            </div>
+        </el-row>
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '.vue-box',
+        data: {
+            id: sa.$util.getUrlArgs('id', 0),	// 从url中获取传值
+            student:null
+        },
+        created:function(){
+            this.Student(this.id);
+        },
+        methods: {
+            Student:function(Id)
+            {
+                var val = this;
+
+                $.ajax({
+                    url:"/showStudent",
+                    data:{"studentId":Id},
+                    datatype:'json',
+                    type:"post",
+                    success:function(res)
+                    {
+                        if(res!='')
+                        {
+                            val.student=res;
+                        }
+                    },
+                    error:function(res)
+                    {
+                        if(res.status==500)
+                        {
+                            layer.msg("通信错误");
+                        }
+                    }
+                })
+            }
+
+        }
+    })
+
+
+
+</script>
+</body>
+</html>

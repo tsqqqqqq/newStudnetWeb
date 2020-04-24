@@ -1,0 +1,26 @@
+body
+{
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+}
+.box-content
+{
+    width: 80%;
+    height: 80%;
+    margin: 20px auto;
+}
+.show-content
+{
+    width: 60%;
+    margin: auto;
+    line-height: 50px;
+}
+.show-label
+{
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 华文宋体;
+    line-height: 16px
+;
+}

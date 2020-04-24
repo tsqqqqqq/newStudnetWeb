@@ -1,0 +1,13 @@
+.class_btn
+{
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 10px ;
+}
+.class_box
+{
+    width: 100%;
+    height: auto;
+    word-wrap:break-word;
+    word-break:break-all;
+}
