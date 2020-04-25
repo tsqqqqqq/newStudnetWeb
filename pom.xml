@@ -42,7 +42,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>8.0.18</scope>
+            <scope>5.1.38</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
