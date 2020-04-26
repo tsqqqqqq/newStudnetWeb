@@ -6,7 +6,6 @@ import com.example.newstudentweb.mapper.Student_Mapper;
 import com.example.newstudentweb.Uilt.certificateUtilt;
 import com.example.newstudentweb.model.Class;
 import com.example.newstudentweb.model.Student;
-import com.sun.javafx.collections.MappingChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;

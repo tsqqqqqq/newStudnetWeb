@@ -1,13 +1,10 @@
 package com.example.newstudentweb.service;
 
-import com.example.newstudentweb.Uilt.certificateUtilt;
 import com.example.newstudentweb.entity.ID_entity;
 import com.example.newstudentweb.mapper.users_Mapper;
 import com.example.newstudentweb.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @Service
 public class users_Service {

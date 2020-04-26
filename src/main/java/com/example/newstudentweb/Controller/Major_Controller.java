@@ -5,7 +5,6 @@ import com.example.newstudentweb.model.Major;
 import com.example.newstudentweb.service.Class_Service;
 import com.example.newstudentweb.service.Major_Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
