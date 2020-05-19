@@ -8,22 +8,22 @@ package com.example.newstudentweb.model;
 
 
 public class Student{
-	private int studentId;
-	private int dormitoryId;
-	private int classId;
-	private String studentName;
-	private int studentAge;
-	private String studentSex;
-	private String studentIdNum;
-	private int studentType;
-	private String studentExamNum;
-	private String studentPhone;
-	private String studentAddr;
-	private String studentEmail;
-	private double studentMoney;
-	private int studentInFo;
-	private String studentActivaTime;
-	private int majorId;
+	private int studentId;//学生Id
+	private int dormitoryId;//宿舍ID
+	private int classId;//班级ID
+	private String studentName;//学生姓名
+	private int studentAge;//学生年龄
+	private String studentSex;//学生性别
+	private String studentIdNum;//学生学号
+	private int studentType;//学生类型
+	private String studentExamNum;//学生成绩
+	private String studentPhone;//学生联系方式
+	private String studentAddr;//学生地址
+	private String studentEmail;//学生邮件d
+	private double studentMoney;//学生缴费金额
+	private int studentInFo;//学生是否激活
+	private String studentActivaTime;//激活时间
+	private int majorId;//专业I
 
 	   public int getMajorId() {
 		   return majorId;

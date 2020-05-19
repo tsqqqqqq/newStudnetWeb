@@ -74,6 +74,15 @@ public interface Student_Mapper {
     @Update("update student set classId = #{classId} where studentId = #{studentId}")
     public boolean AssignStudentToClass(int classId,int studentId);
 
+    /***
+     * 分配学生到宿舍
+     * @param dormitoryId
+     * @param studentId
+     * @return
+     */
+    @Update("update student set dormitoryId = #{dormitoryId} where studentId = #{studentId}")
+    public boolean AssignStudentToDormitory(int dormitoryId,int studentId);
+
     /**
      * 校验学生准考证号
      * @param examNum

@@ -19,7 +19,7 @@ public class Mail_Controller {
 
         @RequestMapping(value = "/getCheckCode", method = RequestMethod.POST)
         public RestResponse<String> getCheckCode(String email){
-
+            System.err.println(email);
             RestResponse restResponse = new RestResponse();
             String checkCode = String.valueOf(new Random().nextInt(899999) + 100000);
             String message = "您的注册验证码为："+checkCode;

@@ -286,7 +286,6 @@
 									'email': this.Email.email
 								},
 								success: function (res) {
-
 									sessionStorage.setItem('checkCode', hex_md5(res.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
 								},
 								error: function (res) {

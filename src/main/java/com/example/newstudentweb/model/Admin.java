@@ -8,9 +8,9 @@ package com.example.newstudentweb.model;
 
 
 public class Admin{
-	private int id;
-	private String adminUsers;
-	private String adminPassWord;
+	private int id;//主键Id
+	private String adminUsers;//管理员账号
+	private String adminPassWord;//管理员密码
 
 
 public Admin(){
@@ -22,9 +22,11 @@ public Admin(){
 		return id;
 	}
 	public void setAdminUsers(String adminUsers){
-	this.adminUsers=adminUsers;
+
+		this.adminUsers=adminUsers;
 	}
 	public String getAdminUsers(){
+
 		return adminUsers;
 	}
 	public void setAdminPassWord(String adminPassWord){

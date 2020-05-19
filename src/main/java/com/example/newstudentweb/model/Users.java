@@ -8,10 +8,10 @@ package com.example.newstudentweb.model;
 
 
 public class Users{
-	private int userId;
-	private String studentIdNum;
-	private String studentPassWord;
-	private String createDate;
+	private int userId;//用户ID 主键 其实就是学生登陆的信息主键
+	private String studentIdNum;//学生账号
+	private String studentPassWord;//学生的密码
+	private String createDate;//创建的时间
 
 
 

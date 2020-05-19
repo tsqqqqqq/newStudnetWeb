@@ -8,12 +8,12 @@ package com.example.newstudentweb.model;
 
 
 public class Dormitory{
-	private int dormitoryId;
-	private String dormitoryNum;
-	private int Max;
-	private String dormitoryType;
-	private String  dormitoryAddr;
-	private int classId;
+	private int dormitoryId;//宿舍主键ID
+	private String dormitoryNum;//宿舍编号
+	private int Max;//最大容量
+	private String dormitoryType;//宿舍类型  男生\女生
+	private String  dormitoryAddr;//宿舍地址
+	private int classId;//对应的班级
 
 
 public Dormitory(){

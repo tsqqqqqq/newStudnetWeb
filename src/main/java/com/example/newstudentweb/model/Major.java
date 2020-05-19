@@ -2,9 +2,9 @@ package com.example.newstudentweb.model;
 
 public class Major {
 
-        private int majorId;
-        private String majorNum;
-        private String majorName;
+        private int majorId;//专业ID
+        private String majorNum;//专业编号
+        private String majorName;//专业名称
 
     public Major()
     {

@@ -2,9 +2,11 @@ package com.example.newstudentweb.service;
 
 import com.example.newstudentweb.entity.ID_entity;
 import com.example.newstudentweb.mapper.Class_Mapper;
+import com.example.newstudentweb.mapper.Dormitory_Mapper;
 import com.example.newstudentweb.mapper.Student_Mapper;
 import com.example.newstudentweb.Uilt.certificateUtilt;
 import com.example.newstudentweb.model.Class;
+import com.example.newstudentweb.model.Dormitory;
 import com.example.newstudentweb.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class Student_service {
 
     @Autowired
     private certificateUtilt certificateUtilt;
+
+    @Autowired
+    private Dormitory_Mapper dormitory_mapper;
 
     @Autowired
     private Class_Mapper class_mapper;
@@ -148,7 +154,6 @@ public class Student_service {
      */
     public boolean StudentInfo(Student student)
     {
-
         boolean b =false;
         if(student.getStudentType()==1)
         {
@@ -163,6 +168,7 @@ public class Student_service {
 
         int studentId = student.getStudentId();
         StudentClass(studentId);
+        StudentDormitroy(studentId);
        return  b;
     }
 
@@ -208,7 +214,6 @@ public class Student_service {
      */
     public void StudentClass(int studentId)
     {
-
         List<Integer> classId = class_mapper.queryStudentMajorClass(studentId);
 
         for(int i =0;i<classId.size();i++)
@@ -220,5 +225,36 @@ public class Student_service {
             }
         }
 
+    }
+
+    /**
+     * 学生激活分配宿舍
+     * @param studnetId
+     */
+    public void StudentDormitroy(int studnetId){
+        //学生的性别
+        //学生的专业
+        Student student = new Student();
+        //查询某一个学生的信息
+        student = student_mapper.showStudent(studnetId);
+        //可以知道这个学生的所有属性 包括姓名 年龄 性别。。。。。
+        int Max=6;
+        int sexType=-1;
+        //查询所有没有被分配或者宿舍容量没有到达极限的宿舍 以及 性别与当前学生性别一致的宿舍
+        Dormitory dormitory = new Dormitory();
+        if(student.getStudentSex().equals("男")){
+           sexType= 0;
+        }else{
+            sexType=1;
+        }
+        //获得当前宿舍容量未达上限的一个宿舍
+        dormitory=dormitory_mapper.queryDormitory(sexType,Max);
+        int dormitoryId = dormitory.getDormitoryId();
+        //分配学生到宿舍
+        boolean b =student_mapper.AssignStudentToDormitory(dormitoryId,studnetId);
+        if(b){
+            int max = dormitory.getMax();
+            dormitory_mapper.DormitoryMax(dormitoryId,max+1);
+        }
     }
 }

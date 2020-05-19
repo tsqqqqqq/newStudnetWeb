@@ -8,9 +8,9 @@ package com.example.newstudentweb.model;
 
 
 public class Class{
-	private int classId;
-	private int majorId;
-	private String classNum;
+	private int classId; // 班级 主键Id
+	private int majorId;//专业id
+	private String classNum;//班级编号
 
 
 public Class(){

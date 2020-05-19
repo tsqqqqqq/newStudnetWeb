@@ -22,9 +22,9 @@ public class Dormitory_Controller {
     }
 
     @RequestMapping("/NotClassDormitoryList")
-    public List<Dormitory> NotClassDormitoryList()
+    public List<Dormitory> NotClassDormitoryList(int pageNo, int pageSize)
     {
-        return dormitory_service.NotClassDormitoryList();
+        return dormitory_service.NotClassDormitoryList(pageNo,pageSize);
     }
 
 

@@ -4,6 +4,7 @@ package com.example.newstudentweb.mapper;
 import com.example.newstudentweb.model.Dormitory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,11 +29,21 @@ public interface Dormitory_Mapper {
      * @return
      */
     @Select("select * from dormitory where classId is  null and dormitoryInfo = 0 ")
-    public List<Dormitory> NotClassDormitoryList();
+    public List<Dormitory> NotClassDormitoryList(int pageNo, int pageSize);
 
     @Select("select count(dormitoryId) from dormitory")
     public int CountDormitoryList();
 
     @Select("select dormitoryNum from dormitory where dormitoryId = #{dormitoryId}")
     public String DormitoryNum(int dormitoryId);
+
+    /**
+     * 查询当前学生的性别一致的宿舍
+     * @return
+     */
+    @Select("select * from dormitory where dormitoryType = #{sexType} and max<#{Max} limit 0,1")
+    public Dormitory queryDormitory(int sexType,int Max);
+
+    @Update("update dormitory set Max =#{max} where dormitoryId = #{dormitoryId}")
+    public boolean DormitoryMax(int dormitoryId,int max);
 }

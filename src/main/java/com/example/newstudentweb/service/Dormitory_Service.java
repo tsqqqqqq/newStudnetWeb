@@ -25,9 +25,9 @@ public class Dormitory_Service {
 
 
 
-    public List<Dormitory> NotClassDormitoryList()
+    public List<Dormitory> NotClassDormitoryList(int pageNo, int pageSize)
     {
-        return dormitory_mapper.NotClassDormitoryList();
+        return dormitory_mapper.NotClassDormitoryList(pageNo,  pageSize);
     }
 
 
