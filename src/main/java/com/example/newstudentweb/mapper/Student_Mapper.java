@@ -140,6 +140,13 @@ public interface Student_Mapper {
     @Select("Select StudentIdNum from student where studentEmail = #{Email}")
     public String checkEmail(String Email);
 
+    /**
+     * 查询数据总数
+     * @return
+     */
     @Select("Select count(StudentId) from student")
     public int QueryCount();
+
+    @Select("select studentIdNum from student where studentIdNum=#{studentIdNum}")
+    public boolean checkStudentIdNum(String studentIdNum);
 }

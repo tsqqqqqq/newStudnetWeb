@@ -67,7 +67,7 @@ public class Student_service {
         String word = id_entity.keyEntity(birth);
         student.setStudentIdNum(studentIdNum.replaceAll(birth,word));
 
-        return student_mapper.studentAdd(student) ? true: false;
+        return student_mapper.checkStudentIdNum(student.getStudentIdNum())? false:student_mapper.studentAdd(student) ? true: false;
     }
 
 
@@ -254,6 +254,11 @@ public class Student_service {
         }
     }
 
+    /**
+     * 批量录入
+     * @param list
+     * @return
+     */
     public String bulkImport(List<Student> list){
         int count=0;
         for(Student stu :list){
