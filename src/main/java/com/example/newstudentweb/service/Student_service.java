@@ -244,13 +244,16 @@ public class Student_service {
             sexType=1;
         }
         //获得当前宿舍容量未达上限的一个宿舍
-        dormitory=dormitory_mapper.queryDormitory(sexType,Max);
+        dormitory=dormitory_mapper.queryDormitory(sexType);
         int dormitoryId = dormitory.getDormitoryId();
         //分配学生到宿舍
         boolean b =student_mapper.AssignStudentToDormitory(dormitoryId,studnetId);
         if(b){
-            int max = dormitory.getMax();
-            dormitory_mapper.DormitoryMax(dormitoryId,max+1);
+            int dormitorySum = dormitory.getDormitorySum();
+            dormitory_mapper.DormitorydormitorySum(dormitoryId,dormitorySum+1);
+            if(dormitorySum+1==dormitory.getMax()){
+                dormitory_mapper.UpdatedormitoryInFo(dormitory.getDormitoryId());
+            }
         }
     }
 
@@ -273,7 +276,26 @@ public class Student_service {
         return student_mapper.QueryCount();
     }
 
+    /**
+     * 修改+分配班级宿舍
+     * @param student
+     * @return
+     */
     public boolean updateStudent(Student student){
+        HashMap<String,Object> oldDormitory = new HashMap<String, Object>();
+        oldDormitory = dormitory_mapper.oldStudentDormitoryId(student.getStudentId());
+        int oldDormitoryId =Integer.parseInt(String.valueOf(oldDormitory.get("oldDormitoryId")));
+        int oldDormitorySum= Integer.parseInt(String.valueOf(oldDormitory.get("oldDormitorySum")));
+        if(oldDormitoryId!=student.getDormitoryId()) {
+            boolean oldB = dormitory_mapper.DormitorydormitorySum(oldDormitoryId, oldDormitorySum - 1);
+            if (oldB) {
+                int newDormitorySum = dormitory_mapper.newDormitoryIdMax(student.getDormitoryId());
+                boolean newB = dormitory_mapper.DormitorydormitorySum(student.getDormitoryId(), newDormitorySum + 1);
+                if (newB&&newDormitorySum+1==dormitory_mapper.queryMax(student.getDormitoryId())) {
+                    dormitory_mapper.UpdatedormitoryInFo(student.getDormitoryId());
+                }
+            }
+        }
         return student_mapper.UpdateStudent(student);
     }
 }

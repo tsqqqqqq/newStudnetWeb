@@ -2,11 +2,14 @@ package com.example.newstudentweb.Controller;
 
 
 import com.example.newstudentweb.model.Dormitory;
+import com.example.newstudentweb.model.Student;
 import com.example.newstudentweb.service.Dormitory_Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,4 +49,9 @@ public class Dormitory_Controller {
 
     @RequestMapping("/DormitoryNum")
     public String DormitoryNum(int dormitoryId){return dormitory_service.DormitoryNum(dormitoryId);}
+
+    @RequestMapping("/queryDormitoryStudent/{dormitoryId}")
+    public HashMap<String,Object> queryDormitoryStudent(@PathVariable("dormitoryId") int dormitoryId){
+            return dormitory_service.queryDormitoryStudent(dormitoryId);
+    }
 }

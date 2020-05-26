@@ -11,9 +11,10 @@ public class Dormitory{
 	private int dormitoryId;//宿舍主键ID
 	private String dormitoryNum;//宿舍编号
 	private int Max;//最大容量
+	private int dormitorySum;//宿舍总人数
 	private String dormitoryType;//宿舍类型  男生\女生
 	private String  dormitoryAddr;//宿舍地址
-	private int classId;//对应的班级
+	private int dormitoryInfo;
 
 
 public Dormitory(){
@@ -55,12 +56,20 @@ public Dormitory(){
 		   this.dormitoryAddr = dormitoryAddr;
 	   }
 
-	   public int getClassId() {
-		   return classId;
+	   public int getDormitoryInfo() {
+		   return dormitoryInfo;
 	   }
 
-	   public void setClassId(int classId) {
-		   this.classId = classId;
+	   public void setDormitoryInfo(int dormitoryInfo) {
+		   this.dormitoryInfo = dormitoryInfo;
+	   }
+
+	   public int getDormitorySum() {
+		   return dormitorySum;
+	   }
+
+	   public void setDormitorySum(int dormitorySum) {
+		   this.dormitorySum = dormitorySum;
 	   }
    }
 

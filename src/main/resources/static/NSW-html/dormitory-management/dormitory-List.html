@@ -94,20 +94,20 @@
             </el-table-column>
 
             <el-table-column label="宿舍地址" prop="dormitoryAddr"> </el-table-column>
-            <el-table-column label="最大容纳人数">{{studentMax}}</el-table-column>
-            <el-table-column label="当前容纳人数" prop="max"></el-table-column>
+            <el-table-column label="最大容纳人数" prop="max"></el-table-column>
+            <el-table-column label="当前容纳人数" prop="dormitorySum"></el-table-column>
 
             <el-table-column label="宿舍状态">
                 <template slot-scope="scope">
-                    <span style="color: green;" v-if="6-scope.row.max ==0">已满</span>
-                    <span style="color: red;" v-if="6-scope.row.max > 0">未满</span>
+                    <span style="color: green;" v-if="scope.row.dormitoryInfo==1">已满</span>
+                    <span style="color: red;" v-if="scope.row.dormitoryInfo==0">未满</span>
                 </template>
             </el-table-column>
 
             <el-table-column prop="address" label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" class="c-button" icon="el-icon-postcard" @click="sa.$fast.showIframe(scope.row.studentName,  'student-show.html?id=' + scope.row.studentId)">查看</el-button>
-                    <el-button type="warning" v-if="6-scope.row.max > 0" class="c-button" icon="el-icon-help" @click="sa.$fast.showIframe(scope.row.studentName, 'student-update.html?id=' + scope.row.studentId)">手动分配</el-button>
+                    <el-button type="primary" class="c-button" icon="el-icon-postcard" @click="ClassLayer(scope.row.dormitoryNum, scope.row.dormitoryId)">查看</el-button>
+                    <el-button type="warning" class="c-button" >修改宿舍容量</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -147,7 +147,6 @@
                 count: 0
             },
             dataList:[],
-            studentMax:6
 
         },
         created: function(){
@@ -185,7 +184,7 @@
                     success:function(res)
                     {
                         self.dataList=res.list;
-                        elf.page.count=res.count;
+                        self.page.count=res.count;
                     },
                     error:function (res) {
                         console.log(res.status);
@@ -203,6 +202,18 @@
                     },
                     error:function (res) {
                         console.log(res.status);
+                    }
+                })
+            },
+            ClassLayer:function (name,id) {
+                layer.open({
+                    type:2,
+                    content:"dormitory.html",
+                    area:['90%','90%'],
+                    title:name+"宿舍信息",
+                    success:function (layero,index) {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.child(id);
                     }
                 })
             }

@@ -46,11 +46,6 @@ var menuList =	[
                 name: '宿舍列表',
                 url: 'NSW-html/dormitory-management/dormitory-List.html'
             },
-            {
-                id: '3-2',
-                name: '宿舍分配',
-                url: 'NSW-html/dormitory-management/dormitory.html'
-            }
         ]
     },
 ]

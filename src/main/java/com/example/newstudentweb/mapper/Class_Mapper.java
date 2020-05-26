@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -84,5 +85,6 @@ public interface Class_Mapper {
      */
     @Select("select classNum from Class where classId = #{classId}")
     public String ClassNum(int classId);
+
 
 }

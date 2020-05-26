@@ -1,12 +1,8 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>角色列表</title>
-
-
-    <!-- 所有的 css 资源 -->
+    <meta charset="UTF-8">
+    <title>Title</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="../../css/sa.css">
     <link rel="stylesheet" href="../../css/class.css">
@@ -18,177 +14,96 @@
     <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
     <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
     <script src="../../js/sa.js"></script>
-
-
 </head>
 <body>
-<!-- 防止margin向下击穿 -->
-<div style="margin-top: -1em;"><br></div>
+<div id="app">
+    <template>
+        <el-table
+                :data="tableData.filter(data => !search || data.studentName.toLowerCase().includes(search.toLowerCase()))"
+                style="width: 100%">
+            <el-table-column
+                    label="身份证号"
+                    prop="studentIdNum">
+            </el-table-column>
+            <el-table-column
+                    label="姓名"
+                    prop="studentName">
+            </el-table-column>
+            <el-table-column
+                    label="性别"
+                    prop="studentSex">
+            </el-table-column>
+            <el-table-column
+                    label="手机号码"
+                    prop="studentPhone">
+            </el-table-column>
+            <el-table-column
+                    align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input
+                            v-model="search"
+                            size="mini"
+                            placeholder="输入姓名搜索"/>
+                </template>
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            @click="handleshow(scope.$index, scope.row)">查看</el-button>
 
-<div class="vue-box">
-
-    <!-- 参数栏 -->
-    <div class="c-panel">
-        <div class="c-title">检索参数</div>
-        <el-form ref="form">
-            <div class="c-item">
-                <label class="c-label">名称：</label>
-                <el-input size="mini" v-model="p.username" placeholder="模糊搜索" @keyup.enter="f5"></el-input>
-            </div>
-            <div class="c-item" style="min-width: 0px;">
-                <el-button type="primary" icon="el-icon-search" size="mini" @click="f5">查询</el-button>
-            </div>
-            <div class="c-item" style="min-width: 0px;">
-                <el-button type="primary" icon="el-icon-thumb" size="mini" @click="ClassAdd">添加</el-button>
-            </div>
-        </el-form>
-
-    </div>
-
-    <div class="c-panel c-table">
-        <div class="c-title" >专业列表</div>
-        <el-collapse v-model="activeNames"  v-for="(item, index) in dataList" :key="index" :name="index" @change="handleChange" accordion @click="ClassList">
-            <el-collapse-item v-bind:title="item.majorName" v-bind:name="dataList[index].majorId" >
-                <div class="class_box">
-                    <div v-for="(item, index) in classList" :key="index" :name="index" class="class_btn">
-                        <el-button type="primary" name="item.classId" @click="ClassLayer(item.classId)">{{item.classNum}}</el-button>
-                    </div>
-                </div>
-            </el-collapse-item>
-
-        </el-collapse>
-
-    </div>
-
-
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
 </div>
-<script>
-    var app = new Vue({
-        el: '.vue-box',
-        data: {
-            activeNames:'1',
-            sa: sa, 	// 超级对象
-            p: {	// 查询参数
-                name: '',
-            },
-            dataList:[],
-            classList:[]
-
-        },
-        methods: {
-            handleChange:function(id) {
-                if(id!="")
-                {
-                    this.ClassList(id);
-                }
-            },
-            // 刷新
-            f5: function(){
-                sa.ajax2('/role/getList', {}, function(res){
-                    this.dataList = sa.$util.listAU();	// 数据
-                }.bind(this));
-            },
-            MajorList:function () {
-                var sfle = this;
-                $.ajax({
-                    url:"/MajorList",
-                    dataType:"json",
-                    Type:"post",
-                    async:false,
-                    success:function(res)
-                    {
-                        sfle.dataList= res;
-                    },
-                    error:function (res) {
-
-                    }
-                });
-
-            },
-            ClassList:function (id) {
-
-                var sfle = this;
-                $.ajax({
-                    url: "/classList",
-                    data:{"majorId":id},
-                    dataType:"json",
-                    type:"post",
-                    success:function (res) {
-                        if(res!=null) {
-                            sfle.classList = res;
-                        }
-                        else
-                        {
-                            layer.msg("暂无班级信息");
-                        }
-
-                    },
-                    error:function (res) {
-                        layer.msg("暂无班级信息");
-                    }
-                })
-
-            },
-            ClassLayer:function(id)
-            {
-                layer.open({
-                    type:2,
-                    content:"dormitory-add.html",
-                    area:['90%','90%'],
-                    success:function (layero,index) {
-                        var iframe = window['layui-layer-iframe' + index];
-                        iframe.child(id);
-                    }
-                })
-            },
-            ClassAdd:function(){
-
-                layer.open({
-                    type:2,
-                    title:"班级添加",
-                    content:"dormitory-add.html",
-                    area:['90%','90%'],
-                    btn:['添加','取消'],
-                    btn1:function(layero,index){
-                        var openPage = window[index.find('iframe')[0]['name']];
-                        var id= openPage.app.id;
-                        $.ajax({
-                            url:"/classAdd",
-                            data:{"MajorId":id},
-                            dataType:"Json",
-                            Type: "POST",
-                            success:function (res) {
-                                layer.msg(res);
-                                if (res == false)
-                                {
-                                    layer.msg("添加失败 ")
-                                }else
-                                {
-                                    layer.mas("添加成功")
-                                }
-                            },
-                            error:function (res) {
-
-                            }
-                        });
-
-                    }
-                })
-            }
-
-        },
-        created: function(){
-
-            this.MajorList();
-        }
-    })
-
-
-
-
-
-
-</script>
 
 </body>
+<script>
+    function child(id) {
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                tableData: [],
+                search: ''
+            },
+            created:function(){
+                this.classShow(id);
+            },
+            methods: {
+                handleshow:function(index, row) {
+                    layer.open({
+                        type:2,
+                        content:"../user/student-show.html?id="+row.studentId,
+                        area:['95%','95%']
+                    })
+
+                },
+                classShow:function (id) {
+                    var slfe = this;
+                    $.ajax({
+                        url:"/queryDormitoryStudent/"+id,
+                        dataType:"json",
+                        type:"POST",
+                        success:function (res) {
+                            if(res!='') {
+                                if (res.studentIdNum != null) {
+                                    var IdNum = (res.studentIdNum).substring("6", "14");
+                                    IdNum = (res.studentIdNum).replace(IdNum, "********");
+                                    res.studentIdNum = IdNum;
+                                }
+                                slfe.tableData = res.list;
+                            }
+                        },
+                        error:function (res) {
+
+                        }
+                    })
+
+                }
+
+            }
+        })
+    }
+</script>
 </html>
