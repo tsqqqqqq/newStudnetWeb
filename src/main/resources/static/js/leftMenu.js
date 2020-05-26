@@ -44,7 +44,7 @@ var menuList =	[
             {
                 id: '3-1',
                 name: '宿舍列表',
-                url: 'NSW-html/dormitory-management/dormitory-list.html'
+                url: 'NSW-html/dormitory-management/dormitory-List.html'
             },
             {
                 id: '3-2',
