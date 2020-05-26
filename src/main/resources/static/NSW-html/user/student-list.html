@@ -48,6 +48,7 @@
                 class="upload-demo"
                 action="/bulkImport"
                 multiple
+                :on-success="uploadSuccess"
                 :limit="1">
             <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
@@ -238,8 +239,11 @@
                         console.log(res.status);
                     }
                 })
+            },
+            uploadSuccess:function(response, file, fileList)
+            {
+                layer.msg(response);
             }
-
 
         },
         mounted:function(){

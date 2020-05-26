@@ -31,6 +31,17 @@ public class Dormitory_Service {
     }
 
 
+    public List<Dormitory> queryUpdateDormitoryList(String studentSex )
+    {
+        int sexType=-1;
+        if(studentSex.equals("男")||studentSex=="男"){
+            sexType = 0;
+        }else{
+             sexType=1;
+        }
+        return  dormitory_mapper.queryUpdateDormitory(sexType,6);
+    }
+
     public int CountDormitory()
     {
         return dormitory_mapper.CountDormitoryList();

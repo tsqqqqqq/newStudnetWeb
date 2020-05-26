@@ -53,12 +53,12 @@
     <div class="box-content" >
         <el-row :gutter="20">
             <div>
-
+                <el-form ref="form" :model="formData" label-width="80px" id="updateInput">
                 <el-col :span="6">
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">姓名：</label>
-                            <span>{{student.studentName}}</span>
+                            <el-input v-model="formData.studentName" style="top:-50px;left:50px;"></el-input>
                         </div>
                     </div>
                 </el-col>
@@ -67,9 +67,7 @@
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">性别：</label>
-
                             <span>{{student.studentSex}}</span>
-
                         </div>
                     </div>
                 </el-col>
@@ -87,9 +85,7 @@
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">学生类型：</label>
-
                             <span>{{student.studentType}}</span>
-
                         </div>
                     </div>
                 </el-col>
@@ -120,8 +116,8 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
-                            <label class="c-label show-label">家庭地址：</label>
-                            <span>{{student.studentAddr}}</span>
+                            <label class="c-label show-label" style="position: relative; left: -20px;">家庭地址：</label>
+                            <el-input v-model="formData.studentAddr" style="top:-50px;left:50px;"></el-input>
                         </div>
                     </div>
                 </el-col>
@@ -130,8 +126,8 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
-                            <label class="c-label show-label">手机号码：</label>
-                            <span>{{student.studentPhone}}</span>
+                            <label class="c-label show-label" style="position: relative; left: -20px;">手机号码：</label>
+                            <el-input v-model="formData.studentPhone" style="top:-50px;left:50px;"></el-input>
                         </div>
                     </div>
                 </el-col>
@@ -142,7 +138,7 @@
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">录取专业：</label>
-                            <span>{{student.studentMajor}}</span>
+                            <span>{{majorName}}</span>
                         </div>
                     </div>
                 </el-col>
@@ -150,8 +146,10 @@
                 <el-col :span="7">
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
-                            <label class="c-label show-label">录取班级：</label>
-                            <span>{{student.classId}}</span>
+                            <label class="c-label show-label" style="position: relative; left: -20px;">录取班级：</label>
+                            <el-select v-model="formData.classId"  style="top:-50px;left:50px;">
+                                <el-option  v-for="item in classList"  :value="item.classId" :key="item.classId" :label="item.classNum"></el-option>
+                            </el-select>
                         </div>
                     </div>
                 </el-col>
@@ -159,8 +157,10 @@
                 <el-col :span="7">
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
-                            <label class="c-label show-label">宿舍编号：</label>
-                            <span>{{student.dormitoryId}}</span>
+                            <label class="c-label show-label" style="position: relative; left: -20px;">宿舍编号：</label>
+                            <el-select v-model="formData.dormitoryId"  style="top:-50px;left:50px;">
+                                <el-option v-for="item in dormitoryList" :value="item.dormitoryId" :key="item.dormitoryId" :label="item.dormitoryNum"></el-option>
+                            </el-select>
                         </div>
                     </div>
                 </el-col>
@@ -172,7 +172,7 @@
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">邮件：</label>
-                            <span>{{student.studentEmail}}</span>
+                            <el-input v-model="formData.studentEmail" style="top:-50px;left:50px;"></el-input>
                         </div>
                     </div>
                 </el-col>
@@ -181,7 +181,7 @@
                     <div class="grid-content bg-purple" style="height: 50px;  ">
                         <div class="show-content">
                             <label class="c-label show-label">是否激活：</label>
-                            <span>{{student.studentInFo}}</span>
+                            <span>{{studentInfo}}</span>
                         </div>
                     </div>
                 </el-col>
@@ -194,8 +194,13 @@
                         </div>
                     </div>
                 </el-col>
-
-
+                    <el-col :span="7">
+                    <el-button type="primary" @click="onUpdate()">修改</el-button>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-button @clcik="cencel()">取消</el-button>
+                    </el-col>
+                </el-form>
             </div>
         </el-row>
     </div>
@@ -205,7 +210,22 @@
         el: '.vue-box',
         data: {
             id: sa.$util.getUrlArgs('id', 0),	// 从url中获取传值
-            student:null
+            student:null,
+            formData:{
+                studentName:'',
+                studentEmail:'',
+                dormitoryId:'',
+                classId:'',
+                studentPhone:'',
+                studentAddr:''
+            },
+            disabled:false,
+            studentInfo:"",
+            majorName:"",
+            className:"",
+            dormitoryName:"",
+            classList:[],
+            dormitoryList:[],
         },
         created:function(){
             this.Student(this.id);
@@ -225,6 +245,23 @@
                         if(res!='')
                         {
                             val.student=res;
+                            if(res.studentInFo==0){
+                                val.disabled=true;
+                                val.studentInfo="未激活"
+                            }else{
+                                val.disabled=false;
+                                val.studentInfo="已激活"
+                            }
+                            val.formData.studentName=res.studentName;
+                            val.formData.studentEmail=res.studentEmail;
+                            val.formData.dormitoryId=res.dormitoryId;
+                            val.formData.classId=res.classId;
+                            val.formData.studentPhone=res.studentPhone;
+                            val.formData.studentAddr=res.studentAddr;
+
+                            val.MajorName(res.majorId);
+                            val.queryClassList(res.majorId);
+                            val.queryDortomryList(res.studentSex);
                         }
                     },
                     error:function(res)
@@ -235,6 +272,74 @@
                         }
                     }
                 })
+            },
+            MajorName:function(majorId)
+            {
+                var self = this;
+                $.ajax({
+                    url:"/majorName",
+                    data: {"majorId":majorId},
+                    type:"POST",
+                    success:function (res) {
+                        self.majorName = res;
+                    },
+                    error:function (res) {
+
+                    }
+                })
+            },
+            queryClassList:function(majorId){
+                var self = this;
+                $.ajax({
+                    url:"/classList",
+                    data: {"majorId":majorId},
+                    type:"POST",
+                    success:function (res) {
+                        self.classList = res;
+                        console.log(res)
+                    },
+                    error:function (res) {
+
+                    }
+                })
+            },
+            queryDortomryList:function(studentSex){
+                var self = this;
+                $.ajax({
+                    url:"/queryUpdateDormitoryList",
+                    data: {"studentSex":studentSex},
+                    type:"POST",
+                    success:function (res) {
+                        self.dormitoryList = res;
+                        console.log(res);
+                    },
+                    error:function (res) {
+
+                    }
+                })
+            },
+            onUpdate:function(){
+                var self = this;
+                this.formData.studentId=this.student.studentId;
+                console.log(this.formData)
+                $.ajax({
+                    url:"/updateStudent",
+                    data: self.formData,
+                    type:"POST",
+                    success:function (res) {
+                        layer.msg(res);
+                        if(res=="修改成功"){
+                            layer.closeAll();
+                        }
+
+                    },
+                    error:function (res) {
+
+                    }
+                })
+            },
+            cencel:function(){
+                layer.closeAll();
             }
 
         }

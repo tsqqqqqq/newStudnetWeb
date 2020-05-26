@@ -172,4 +172,15 @@ public class Student_Controller {
         }
         return str;
     }
+
+    @RequestMapping("/updateStudent")
+    public String updateStudent(Student formData){
+        boolean b = student_service.updateStudent(formData);
+        String msg="失败";
+        if(b){
+            msg="修改成功";
+        }
+        return msg;
+    }
+
 }

@@ -33,6 +33,10 @@ public class Dormitory_Controller {
         return dormitory_service.NotClassDormitoryList(pageNo,pageSize);
     }
 
+    @RequestMapping("/queryUpdateDormitoryList")
+    public List<Dormitory> queryUpdateDormitoryList(String studentSex){
+        return dormitory_service.queryUpdateDormitoryList(studentSex);
+    }
 
     @RequestMapping("/CountDormitory")
     public int CountDormitory()

@@ -44,6 +44,9 @@ public interface Dormitory_Mapper {
     @Select("select * from dormitory where dormitoryType = #{sexType} and max<#{Max} limit 0,1")
     public Dormitory queryDormitory(int sexType,int Max);
 
+    @Select("select * from dormitory where dormitoryType = #{sexType} and max<#{Max} ")
+    public List<Dormitory> queryUpdateDormitory(int sexType,int Max);
+
     @Update("update dormitory set Max =#{max} where dormitoryId = #{dormitoryId}")
     public boolean DormitoryMax(int dormitoryId,int max);
 

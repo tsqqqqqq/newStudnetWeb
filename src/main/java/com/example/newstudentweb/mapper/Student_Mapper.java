@@ -149,4 +149,8 @@ public interface Student_Mapper {
 
     @Select("select studentIdNum from student where studentIdNum=#{studentIdNum}")
     public boolean checkStudentIdNum(String studentIdNum);
+
+    @Update("update student set studentName = #{studentName},studentAddr=#{studentAddr},studentPhone=#{studentPhone},classId=#{classId},dormitoryId=#{dormitoryId},studentEmail=#{studentEmail}" +
+            " where studentId=#{studentId}")
+    public boolean UpdateStudent(Student student);
 }

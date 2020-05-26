@@ -272,4 +272,8 @@ public class Student_service {
     public int QueryCount(){
         return student_mapper.QueryCount();
     }
+
+    public boolean updateStudent(Student student){
+        return student_mapper.UpdateStudent(student);
+    }
 }
