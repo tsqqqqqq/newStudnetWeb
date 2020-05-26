@@ -42,8 +42,7 @@ public class Student_service {
      */
     public List<Student> StudentList(int pageNo,int pageSize)
     {
-
-        return  student_mapper.StudentList(pageNo-1,pageSize);
+        return  student_mapper.StudentList((pageNo-1)*pageSize,pageSize);
     }
 
     /**
@@ -66,9 +65,6 @@ public class Student_service {
         //调用加密算法 对出生年月日进行加密 替换未加密的身份证信息
         String birth = (String) map.get("birthday");
         String word = id_entity.keyEntity(birth);
-        System.err.println("b-->"+birth);
-        System.err.println("word-->"+word);
-        System.err.println(studentIdNum.replaceAll(birth,word));
         student.setStudentIdNum(studentIdNum.replaceAll(birth,word));
 
         return student_mapper.studentAdd(student) ? true: false;
@@ -256,5 +252,19 @@ public class Student_service {
             int max = dormitory.getMax();
             dormitory_mapper.DormitoryMax(dormitoryId,max+1);
         }
+    }
+
+    public String bulkImport(List<Student> list){
+        int count=0;
+        for(Student stu :list){
+               if(studentAdd(stu)){
+                   count++;
+               }
+        }
+        return "已成功导入"+count+"条记录";
+    }
+
+    public int QueryCount(){
+        return student_mapper.QueryCount();
     }
 }

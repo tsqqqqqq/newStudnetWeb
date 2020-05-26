@@ -46,4 +46,6 @@ public interface Dormitory_Mapper {
 
     @Update("update dormitory set Max =#{max} where dormitoryId = #{dormitoryId}")
     public boolean DormitoryMax(int dormitoryId,int max);
+
+
 }

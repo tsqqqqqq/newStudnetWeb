@@ -139,4 +139,7 @@ public interface Student_Mapper {
      */
     @Select("Select StudentIdNum from student where studentEmail = #{Email}")
     public String checkEmail(String Email);
+
+    @Select("Select count(StudentId) from student")
+    public int QueryCount();
 }

@@ -44,6 +44,13 @@
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="f5">查询</el-button>
             </div>
 
+            <el-upload
+                class="upload-demo"
+                action="/bulkImport"
+                multiple
+                :limit="1">
+            <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
             <!-- <br />
             <div class="c-item">
                 <label class="c-label">注册方式：</label>
@@ -178,8 +185,9 @@
                        },
                        type: "POST",
                        success: function (res) {
-                           self.dataList = res;
-                           self.page.count = res.length;
+                           console.log(res);
+                           self.dataList = res.list;
+                           self.page.count = res.count;
                        },
                        error: function () {
 
@@ -209,10 +217,8 @@
                     dataType:'json',
                     success:function(res)
                     {
-
-                        self.dataList=res;
-                        self.page.count=res.length;
-
+                        self.dataList=res.list;
+                        self.page.count=res.count;
                     },
                     error:function (res) {
                         console.log(res.status);

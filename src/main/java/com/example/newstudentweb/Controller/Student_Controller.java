@@ -1,12 +1,21 @@
 package com.example.newstudentweb.Controller;
 
 
+import com.example.newstudentweb.Uilt.FileUtil;
+import com.example.newstudentweb.Uilt.ImportExcelUtil;
 import com.example.newstudentweb.service.Student_service;
 import com.example.newstudentweb.model.Student;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,10 +32,14 @@ public class Student_Controller {
      * @return
      */
         @RequestMapping("/studentList")
-        public List<Student> studentList(int pageNo , int pageSize)
+        public HashMap<String,Object> studentList(int pageNo , int pageSize)
         {
-
-            return student_service.StudentList(pageNo,pageSize);
+            List<Student> list = student_service.StudentList(pageNo,pageSize);
+            HashMap<String,Object> map = new HashMap<String, Object>();
+            int count = student_service.QueryCount();
+            map.put("count",count);
+            map.put("list",list);
+            return map;
         }
 
         /**
@@ -123,5 +136,40 @@ public class Student_Controller {
     public String checkEmail(String Email)
     {
         return student_service.checkEmail(Email);
+    }
+
+    /**
+     * 批量导入 通过导入Excel文件实现
+     * @param file 文件名
+     * @return
+     */
+    @RequestMapping("/bulkImport")
+    public String bulkImport(@RequestParam("file") MultipartFile file){
+        List<Student> list = new ArrayList<Student>();
+        String str ="";
+        try{
+            if(file!=null){
+            String fileName = file.getOriginalFilename();
+            String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
+                try {
+                    // 该方法是对文件写入的封装，在util类中，导入该包即可使用，后面会给出方法
+                    FileUtil.fileupload(file.getBytes(), path, fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                File targetfile = new File(path + fileName);
+                list = new ImportExcelUtil().getUserList(targetfile);
+                if (list.isEmpty()) {
+                    System.out.println("模板中无数据");
+                    str="模板中无数据";
+                } else {
+                    //2.保存
+                    //this.saveAjxxByStuInfo(list);
+                    str = student_service.bulkImport(list);//获取导入成功的记录
+                }
+            }
+        }catch (Exception e){
+        }
+        return str;
     }
 }

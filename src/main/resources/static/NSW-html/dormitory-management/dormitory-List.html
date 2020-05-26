@@ -184,9 +184,8 @@
                     dataType:'json',
                     success:function(res)
                     {
-
-                        self.dataList=res;
-                        //self.page.count=res.length;
+                        self.dataList=res.list;
+                        elf.page.count=res.count;
                     },
                     error:function (res) {
                         console.log(res.status);
