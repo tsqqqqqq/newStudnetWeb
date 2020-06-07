@@ -54,9 +54,6 @@ public class Student_Controller {
             return (student!=null)? student_service.studentAdd(student):false;
         }
 
-        /**
-         * 录入学生信息 exel版
-         */
 
 
     /**
@@ -121,9 +118,13 @@ public class Student_Controller {
      * @return
      */
     @RequestMapping("/likeName")
-    public List<Student> likeQuery(String studentName,int pageNo , int pageSize)
+    public HashMap<String,Object> likeQuery(String studentName,int pageNo , int pageSize)
     {
-        return student_service.likeQuery(studentName,pageNo,pageSize);
+        List<Student> list = student_service.likeQuery(studentName,pageNo,pageSize);
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        map.put("count",list.size());
+        map.put("list",list);
+        return map;
     }
 
 
